@@ -462,6 +462,10 @@ def run_ai_eval() -> dict[str, Any]:
                         "unresolved": out.unresolvedMentions, "ambiguities": out.ambiguities})
         except ApiError as e:
             rec.update({"status": "error", "error": f"{e.code}: {e.message}"})
+            if e.code in ("AI_MODEL_UNAVAILABLE", "AI_AUTH_ERROR"):  # configuration problem: remaining calls would fail identically
+                rec["elapsedMs"] = round((time.perf_counter() - t0) * 1000, 1)
+                results.append(rec)
+                break
         rec["elapsedMs"] = round((time.perf_counter() - t0) * 1000, 1)
         results.append(rec)
     ok = [r for r in results if r["status"] == "ok"]

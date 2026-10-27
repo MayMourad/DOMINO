@@ -75,6 +75,22 @@ def _system_prompt(h: Household, now_min: Optional[int]) -> str:
         f"Household members: {members}\nResources: {res}\nResponsibilities: {tasks}\n")
 
 
+def map_provider_error(exc: Exception) -> ApiError:
+    """Classify provider failures precisely; never leak provider text, keys or stack traces."""
+    msg = str(exc).lower()
+    code = getattr(exc, "code", None)
+    if code == 429 or "resource_exhausted" in msg or "quota" in msg or "rate limit" in msg or " 429" in msg:
+        return ApiError("AI_RATE_LIMITED", "The AI provider is rate limiting requests. Try again shortly.", 429, retryable=True)
+    if code == 404 or "not_found" in msg or "is not found" in msg or "not supported for generatecontent" in msg:
+        return ApiError("AI_MODEL_UNAVAILABLE", "The configured Gemini model name is not available. Set GEMINI_MODEL to a current model "
+                        "(e.g. gemini-3.8-flash) on the server.", 503)
+    if code in (401, 403) or "api key" in msg or "permission_denied" in msg or "unauthenticated" in msg:
+        return ApiError("AI_AUTH_ERROR", "The server's Gemini credentials were rejected. Check GEMINI_API_KEY on the server.", 503)
+    if "timeout" in msg or "timed out" in msg or "deadline" in msg:
+        return ApiError("AI_TIMEOUT", "The AI provider did not answer in time.", 504, retryable=True)
+    return ApiError("AI_PROVIDER_ERROR", "The AI provider request failed.", 502, retryable=True)
+
+
 def call_gemini(h: Household, text: str, now_min: Optional[int]) -> dict[str, Any]:
     if not ai_available():
         raise ApiError("AI_UNAVAILABLE", "Natural-language interpretation is unavailable: no Gemini API key is "
@@ -91,13 +107,7 @@ def call_gemini(h: Household, text: str, now_min: Optional[int]) -> dict[str, An
                 system_instruction=_system_prompt(h, now_min), temperature=0,
                 response_mime_type="application/json", response_json_schema=LLMExtraction.model_json_schema()))
     except Exception as exc:  # noqa: BLE001 - mapped to a safe error; details never leak
-        msg = str(exc).lower()
-        if "429" in msg or "quota" in msg or "rate" in msg:
-            raise ApiError("AI_RATE_LIMITED", "The AI provider is rate limiting requests. Try again shortly.", 429,
-                           retryable=True) from None
-        if "timeout" in msg or "timed out" in msg or "deadline" in msg:
-            raise ApiError("AI_TIMEOUT", "The AI provider did not answer in time.", 504, retryable=True) from None
-        raise ApiError("AI_PROVIDER_ERROR", "The AI provider request failed.", 502, retryable=True) from None
+        raise map_provider_error(exc) from None
     raw = resp.text or ""
     try:
         return LLMExtraction.model_validate_json(raw).model_dump()

@@ -120,7 +120,7 @@ export interface EventInterpretation {
 export interface FixtureSummary { id: string; name: string; description: string; members: number; tasks: number; resources: number }
 export interface Health {
   status: string; engineVersion: string; solver: string
-  ai: { available: boolean; model: string | null }; benchmarksEnabled: boolean; time: string
+  ai: { available: boolean; model: string | null; warning?: string | null }; benchmarksEnabled: boolean; time: string
 }
 export interface BenchResult {
   id: string; title: string; group: string; kind: string; status: 'pass' | 'fail' | 'not_run'

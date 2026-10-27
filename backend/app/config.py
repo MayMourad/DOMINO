@@ -28,7 +28,8 @@ _load_dotenv()
 @dataclass
 class Settings:
     gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""))
-    gemini_model: str = field(default_factory=lambda: os.getenv("GEMINI_MODEL", "") or "gemini-2.5-flash")
+    gemini_model: str = "gemini-3.8-flash"
+    gemini_model_warning: str | None = None
     cors_allowed_origins: list[str] = field(default_factory=lambda: [
         o.strip() for o in os.getenv(
             "CORS_ALLOWED_ORIGINS",
@@ -42,4 +43,21 @@ class Settings:
     interpret_rate_per_minute: int = 12
 
 
+import re  # noqa: E402
+
+DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+
+
+def normalize_model(value: str) -> tuple[str, str | None]:
+    """A Gemini *model* name looks like ``gemini-…``. Anything else (e.g. a Google Cloud project id pasted by mistake)
+    would fail on every call, so fall back to the default and say so instead of breaking silently."""
+    v = (value or "").strip()
+    if not v:
+        return DEFAULT_GEMINI_MODEL, None
+    if re.fullmatch(r"(models/)?gemini-[A-Za-z0-9._\-]+", v):
+        return v, None
+    return DEFAULT_GEMINI_MODEL, f"GEMINI_MODEL is not a Gemini model name; using {DEFAULT_GEMINI_MODEL}. Set it to e.g. {DEFAULT_GEMINI_MODEL}."
+
+
 settings = Settings()
+settings.gemini_model, settings.gemini_model_warning = normalize_model(os.getenv("GEMINI_MODEL", ""))

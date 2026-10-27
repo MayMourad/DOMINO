@@ -109,7 +109,8 @@ v1 = APIRouter(prefix="/v1")
 @v1.get("/health")
 def health() -> dict[str, Any]:
     return {"status": "ok", "engineVersion": ENGINE_VERSION, "solver": "OR-Tools CP-SAT",
-            "ai": {"available": interpreter.ai_available(), "model": settings.gemini_model if interpreter.ai_available() else None},
+            "ai": {"available": interpreter.ai_available(), "model": settings.gemini_model if interpreter.ai_available() else None,
+                   "warning": settings.gemini_model_warning},
             "benchmarksEnabled": settings.benchmark_runs_enabled, "time": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
 
