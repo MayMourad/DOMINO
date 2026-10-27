@@ -94,7 +94,7 @@ def map_provider_error(exc: Exception) -> ApiError:
         return ApiError("AI_RATE_LIMITED", "The AI provider is rate limiting requests. Try again shortly.", 429, retryable=True)
     if code == 404 or "not_found" in msg or "is not found" in msg or "not supported for generatecontent" in msg:
         return ApiError("AI_MODEL_UNAVAILABLE", "The configured Gemini model name is not available. Set GEMINI_MODEL to a current model "
-                        "(e.g. gemini-3.8-flash) on the server.", 503)
+                        "(e.g. gemini-3.5-flash-lite) on the server.", 503)
     if code in (401, 403) or "api key" in msg or "permission_denied" in msg or "unauthenticated" in msg:
         return ApiError("AI_AUTH_ERROR", "The server's Gemini credentials were rejected. Check GEMINI_API_KEY on the server.", 503)
     if "timeout" in msg or "timed out" in msg or "deadline" in msg:
@@ -111,7 +111,7 @@ def call_gemini(h: Household, text: str, now_min: Optional[int]) -> dict[str, An
     from google.genai import types
 
     try:
-        client = genai.Client(api_key=settings.gemini_api_key, http_options=types.HttpOptions(timeout=15000))
+        client = genai.Client(api_key=settings.gemini_api_key, http_options=types.HttpOptions(timeout=40000))
         resp = client.models.generate_content(
             model=settings.gemini_model,
             contents=f"<user_message>\n{text}\n</user_message>",

@@ -28,7 +28,7 @@ _load_dotenv()
 @dataclass
 class Settings:
     gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""))
-    gemini_model: str = "gemini-3.8-flash"
+    gemini_model: str = "gemini-3.5-flash-lite"
     gemini_model_warning: str | None = None
     cors_allowed_origins: list[str] = field(default_factory=lambda: [
         o.strip() for o in os.getenv(
@@ -45,7 +45,7 @@ class Settings:
 
 import re  # noqa: E402
 
-DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite"
 
 
 def normalize_model(value: str) -> tuple[str, str | None]:

@@ -47,7 +47,7 @@ export const api = {
   validateHousehold: (h: Household, signal?: AbortSignal) =>
     post<{ valid: boolean; issues: ValidationIssue[] }>('/v1/households/validate', { householdSnapshot: h }, signal, 10000),
   interpret: (h: Household, text: string, nowMin: number | null, signal?: AbortSignal) =>
-    post<EventInterpretation>('/v1/events/interpret', { householdSnapshot: h, text, nowMin }, signal, 25000),
+    post<EventInterpretation>('/v1/events/interpret', { householdSnapshot: h, text, nowMin }, signal, 55000),
   simulate: (h: Household, hv: number, events: Disruption[], sv: number, signal?: AbortSignal) =>
     post<SimulationResult>('/v1/simulations', { householdId: h.id, householdVersion: hv, householdSnapshot: h, scenarioVersion: sv, events }, signal),
   recover: (h: Household, hv: number, events: Disruption[], sv: number, opts: {

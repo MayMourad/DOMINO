@@ -74,7 +74,7 @@ def test_provider_error_classification():
 
 def test_model_name_normalisation():
     from app.config import DEFAULT_GEMINI_MODEL, normalize_model
-    assert normalize_model("gemini-3.8-flash") == ("gemini-3.8-flash", None)
+    assert normalize_model("gemini-3.5-flash-lite") == ("gemini-3.5-flash-lite", None)
     assert normalize_model("models/gemini-3.5-flash-lite")[1] is None
     assert normalize_model("")[0] == DEFAULT_GEMINI_MODEL
     m, warn = normalize_model("gen-lang-client-0105351401")  # a project id, not a model
