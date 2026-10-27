@@ -4,6 +4,7 @@ services:
   - type: web
     name: domino-api
     runtime: docker
+    plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /v1/health
