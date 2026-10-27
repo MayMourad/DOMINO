@@ -16,7 +16,13 @@ All results below are from runs performed during development on Windows 11, Pyth
 | `cd frontend && DOMINO_PYTHON=<python> npx playwright test` | **6 passed** (flagship flow, multigenerational, restricted transport + approval, refresh, offline, keyboard/reduced-motion) |
 | `cd frontend && VITE_BASE_PATH=/DOMINO/ npx vite build` | Built; assets reference `/DOMINO/` |
 
-Not executed: deployment to GitHub Pages / a hosting provider (no access), live Gemini calls (no API key), a full WCAG audit, Safari/Firefox runs.
+Additional runs after the first report:
+- **GitHub Actions CI on Ubuntu** (run on the initial push): backend (ruff + pytest), frontend (typecheck, lint, vitest, `/DOMINO/` build) and Playwright e2e — all three jobs **succeeded**.
+- **Live smoke test** (`python scripts/live_smoke.py <api>`) against a running backend, against the Vite proxy, and against a clean-venv install: 12 checks each (health, fixtures, flagship simulation/recovery, secondary disruption, stale-hash and unconfirmed-event refusals, determinism over 3 calls, other two households, honest Gemini-unavailable 503, 50-case suite 46 pass / 0 fail / 4 not run) — all passed.
+- Playwright re-run against servers started in the user's terminal: 6 passed.
+- GitHub Pages deployment: https://maymourad.github.io/DOMINO/ loads and reports *API offline* honestly (no backend attached yet).
+
+Not executed: live Gemini calls (no API key on this machine), the hosted backend (needs the owner's Render sign-in), a full WCAG audit, Safari/Firefox runs.
 
 ## Test layers
 

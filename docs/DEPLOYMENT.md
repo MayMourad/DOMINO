@@ -1,6 +1,11 @@
-# Deployment (prepared, not performed)
+# Deployment
 
-No hosting or GitHub credentials were available, so nothing has been deployed and no live URL exists. Steps for the project owner:
+## Status (2026-10-27)
+- **GitHub repository:** https://github.com/MayMourad/DOMINO (public). CI (backend, frontend, Playwright e2e on Ubuntu) passed on the initial push.
+- **Frontend (GitHub Pages):** https://maymourad.github.io/DOMINO/ — live. Without a backend it correctly shows *API offline* and disables computation.
+- **Backend:** one-click Render Blueprint — https://render.com/deploy?repo=https://github.com/MayMourad/DOMINO — requires the owner to sign in to Render (and optionally paste `GEMINI_API_KEY` in the dashboard). After it is up, set the repository variable `API_BASE_URL` to the service URL and re-run the Pages workflow (`gh variable set API_BASE_URL --body https://<service>.onrender.com && gh workflow run pages.yml`), then verify with `python scripts/live_smoke.py https://<service>.onrender.com --origin https://maymourad.github.io`.
+
+## Details
 
 ## 1. Backend (any HTTPS Python host)
 - Runtime: Python ≥ 3.11 (developed on 3.14). OR-Tools publishes wheels for common platforms; verify the chosen host's Python version has one.
