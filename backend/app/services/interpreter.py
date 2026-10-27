@@ -9,6 +9,7 @@ executed action. Every result is ``confirmed=False`` until the user confirms it 
 
 from __future__ import annotations
 
+import logging
 import re
 import uuid
 from typing import Any, Callable, Literal, Optional
@@ -75,10 +76,20 @@ def _system_prompt(h: Household, now_min: Optional[int]) -> str:
         f"Household members: {members}\nResources: {res}\nResponsibilities: {tasks}\n")
 
 
+log = logging.getLogger("domino.ai")
+_KEY_RE = re.compile(r"AIza[0-9A-Za-z_\-]{10,}|key=[^&\s]+", re.I)
+
+
+def _scrub(text: str) -> str:
+    """Remove anything key-shaped before text is logged or returned."""
+    return _KEY_RE.sub("[redacted]", text)
+
+
 def map_provider_error(exc: Exception) -> ApiError:
     """Classify provider failures precisely; never leak provider text, keys or stack traces."""
     msg = str(exc).lower()
     code = getattr(exc, "code", None)
+    log.warning("Gemini call failed: %s code=%s detail=%s", type(exc).__name__, code, _scrub(str(exc))[:400])
     if code == 429 or "resource_exhausted" in msg or "quota" in msg or "rate limit" in msg or " 429" in msg:
         return ApiError("AI_RATE_LIMITED", "The AI provider is rate limiting requests. Try again shortly.", 429, retryable=True)
     if code == 404 or "not_found" in msg or "is not found" in msg or "not supported for generatecontent" in msg:
@@ -88,7 +99,8 @@ def map_provider_error(exc: Exception) -> ApiError:
         return ApiError("AI_AUTH_ERROR", "The server's Gemini credentials were rejected. Check GEMINI_API_KEY on the server.", 503)
     if "timeout" in msg or "timed out" in msg or "deadline" in msg:
         return ApiError("AI_TIMEOUT", "The AI provider did not answer in time.", 504, retryable=True)
-    return ApiError("AI_PROVIDER_ERROR", "The AI provider request failed.", 502, retryable=True)
+    return ApiError("AI_PROVIDER_ERROR", "The AI provider request failed.", 502, [{"providerErrorType": type(exc).__name__, "providerStatus": code,
+                    "providerMessage": _scrub(str(exc))[:300]}], retryable=True)
 
 
 def call_gemini(h: Household, text: str, now_min: Optional[int]) -> dict[str, Any]:

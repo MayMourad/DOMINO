@@ -79,3 +79,9 @@ def test_model_name_normalisation():
     assert normalize_model("")[0] == DEFAULT_GEMINI_MODEL
     m, warn = normalize_model("gen-lang-client-0105351401")  # a project id, not a model
     assert m == DEFAULT_GEMINI_MODEL and warn
+
+
+def test_provider_details_are_scrubbed():
+    e = ip.map_provider_error(_E("400 INVALID_ARGUMENT at https://x?key=AIzaSyABCDEFGHIJKLMNOP bad schema"))
+    assert e.code == "AI_PROVIDER_ERROR" and "AIza" not in str(e.details) and "key=" not in str(e.details)
+    assert "INVALID_ARGUMENT" in e.details[0]["providerMessage"]
