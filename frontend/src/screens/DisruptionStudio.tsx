@@ -50,7 +50,7 @@ export default function DisruptionStudio() {
   const toast = useStore((s) => s.toast)
   const [form, setForm] = useState<Disruption | null>(null)
   const [text, setText] = useState('')
-  const [clock, setClock] = useState<number | null>(null)
+  const [clock, setClock] = useState<number | null>(() => useStore.getState().draft?.planningStartMin ?? null)
   const [interp, setInterp] = useState<'idle' | 'interpreting' | 'review' | 'error'>('idle')
   const [result, setResult] = useState<EventInterpretation | null>(null)
   const [edited, setEdited] = useState<Disruption[]>([])
@@ -137,8 +137,8 @@ export default function DisruptionStudio() {
             <div className="field"><label htmlFor="nl-text">Message</label>
               <textarea id="nl-text" className="input" rows={3} maxLength={600} value={text} placeholder={`e.g. “${h.members.find((m) => !m.isDependent)?.name ?? 'Amina'} cannot help until 6 PM”`} onChange={(e) => setText(e.target.value)} disabled={!aiOn} /></div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'end' }}>
-              <TimeField label="Scenario clock (used if no start time is stated)" value={clock ?? h.planningStartMin} onChange={setClock} />
-              <button className="btn" onClick={() => setClock(null)} disabled={clock === null}>Unset</button>
+              <TimeField label={clock === null ? "Scenario clock — NOT SET (edit to set; start times will need clarification)" : "Scenario clock (used if no start time is stated)"} value={clock ?? h.planningStartMin} onChange={setClock} />
+              <button className="btn" onClick={() => setClock(null)} disabled={clock === null} title="Without a scenario clock, phrases like 'until 6 PM' need clarification">Unset</button>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="btn primary" disabled={!aiOn || !text.trim() || interp === 'interpreting'} onClick={() => void interpret()}>
