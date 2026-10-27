@@ -66,6 +66,16 @@ def _system_prompt(h: Household, now_min: Optional[int]) -> str:
     return (
         "You extract structured disruption events from a family's short message. You are a parser, not an assistant.\n"
         "Rules: output only the JSON schema. Allowed event types: " + ", ".join(EVENT_TYPES) + ", or 'unsupported'.\n"
+        "Type definitions (choose carefully):
+"
+        "- member_unavailable: a person cannot help/work/drive/be present during the stated window (away, busy, sick, 'can't help', 'out', 'unavailable').
+"
+        "- availability_changed: ONLY when the message says a person is available ONLY during a stated window (new working hours). 'Cannot help from 4 to 5' is member_unavailable, NOT availability_changed.
+"
+        "- resource_unavailable: a vehicle/room/equipment cannot be used in the window. resource_capacity_changed: its capacity changes (put the number in value).
+"
+        "- task_rescheduled: a responsibility must now happen inside the stated window (the window is the new allowed time range).
+"
         "Copy entity mentions exactly as written by the user; never invent people, vehicles or permissions.\n"
         "Times: output 24-hour HH:MM only if the message states them (assume the afternoon for bare hours like '6'); "
         "otherwise null. Never guess a start time for phrases like 'until 6 PM'.\n"
@@ -222,6 +232,9 @@ def interpret(h: Household, text: str, now_min: Optional[int] = None,
                                  reason=ev.get("reason") or text[:80], value=ev.get("value") if etype == "resource_capacity_changed" else None,
                                  confirmed=False))
         resolved += ids
+        if etype == "availability_changed":
+            assumptions.append("'Availability changed' REPLACES the member's availability with this window (they would be available ONLY then). "
+                               "Switch the type to 'Member unavailable' if you meant they cannot help during it.")
         if ambiguities_flag:
             confirmations.append(f"Review the time window for event {events[-1].id}.")
     if unresolved:

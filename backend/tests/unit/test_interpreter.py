@@ -85,3 +85,10 @@ def test_provider_details_are_scrubbed():
     e = ip.map_provider_error(_E("400 INVALID_ARGUMENT at https://x?key=AIzaSyABCDEFGHIJKLMNOP bad schema"))
     assert e.code == "AI_PROVIDER_ERROR" and "AIza" not in str(e.details) and "key=" not in str(e.details)
     assert "INVALID_ARGUMENT" in e.details[0]["providerMessage"]
+
+
+def test_availability_changed_carries_a_replace_warning():
+    out = ip.interpret(load_fixture("amina"), "Khalid only available 4-5", None,
+                       llm([{"type": "availability_changed", "mentions": ["Khalid"], "startTime": "16:00", "endTime": "17:00"}]))
+    assert out.proposedEvents[0].type == "availability_changed"
+    assert any("REPLACES" in a for a in out.assumptions)
