@@ -18,7 +18,7 @@ All households are **fictional**. DOMINO simulates hypothetical events from the 
 | 7 screens (Launch, Network, Disruption Studio, Cascade Lab, Recovery Studio, Futures Lab, Evaluation Lab) | Implemented; flows covered by Playwright |
 | 3D constellation, cinematic cascade timeline, magnetic recovery transitions | Implemented (original code; see `docs/references/ATTRIBUTION.md`) |
 | 50 executable benchmark cases (46 run in backend; 4 external) | Implemented; run results in `docs/benchmark-results/latest.json` |
-| Deployment (GitHub Pages frontend + separate FastAPI host) | Prepared, **not deployed** (no hosting access) |
+| Deployment | **Live:** frontend https://maymourad.github.io/DOMINO/ (GitHub Pages) · API https://domino-api-0fo2.onrender.com (Render free tier — first request after idle can take ~30–60 s) |
 
 See [TESTING.md](TESTING.md) for the exact commands that were run and their results.
 
@@ -52,7 +52,7 @@ npm run dev                                           # http://127.0.0.1:5173 (p
 
 ### Configure Gemini (optional)
 
-Copy `.env.example` to `.env` (repo root, git-ignored) and set `GEMINI_API_KEY` and `GEMINI_MODEL`. The key is read **only by the backend**; it never appears in frontend code. Without it the â€œInterpret with AIâ€ control is labelled unavailable, and presets plus the manual form work fully.
+Copy `.env.example` to `.env` (repo root, git-ignored) and set `GEMINI_API_KEY` and `GEMINI_MODEL` (a *model name* such as `gemini-3.5-flash-lite` — not a Google Cloud project id; a non-model value is ignored with a warning in `/v1/health`). The key is read **only by the backend**; it never appears in frontend code. Without it the â€œInterpret with AIâ€ control is labelled unavailable, and presets plus the manual form work fully.
 
 ### Tests and checks
 

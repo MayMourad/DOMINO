@@ -16,13 +16,15 @@ All results below are from runs performed during development on Windows 11, Pyth
 | `cd frontend && DOMINO_PYTHON=<python> npx playwright test` | **6 passed** (flagship flow, multigenerational, restricted transport + approval, refresh, offline, keyboard/reduced-motion) |
 | `cd frontend && VITE_BASE_PATH=/DOMINO/ npx vite build` | Built; assets reference `/DOMINO/` |
 
-Additional runs after the first report:
-- **GitHub Actions CI on Ubuntu** (run on the initial push): backend (ruff + pytest), frontend (typecheck, lint, vitest, `/DOMINO/` build) and Playwright e2e — all three jobs **succeeded**.
-- **Live smoke test** (`python scripts/live_smoke.py <api>`) against a running backend, against the Vite proxy, and against a clean-venv install: 12 checks each (health, fixtures, flagship simulation/recovery, secondary disruption, stale-hash and unconfirmed-event refusals, determinism over 3 calls, other two households, honest Gemini-unavailable 503, 50-case suite 46 pass / 0 fail / 4 not run) — all passed.
-- Playwright re-run against servers started in the user's terminal: 6 passed.
-- GitHub Pages deployment: https://maymourad.github.io/DOMINO/ loads and reports *API offline* honestly (no backend attached yet).
+Additional runs after the first report (all real, 2026-10-27):
+- **GitHub Actions CI (Ubuntu):** backend (ruff + pytest), frontend (typecheck, lint, vitest, `/DOMINO/` build) and Playwright e2e — **succeeded**.
+- **Live smoke test** (`python scripts/live_smoke.py <api> --origin <pages>`) against a local backend, the Vite proxy, a clean-venv install, and the **hosted Render API**: health, CORS allow/deny, fixtures, flagship simulation + recovery (OPTIMAL, verified), secondary disruption (pickup honestly uncovered), stale-hash and unconfirmed-event refusals, determinism over 3 calls, other two households, live Gemini interpretation, 50-case suite (hosted: 45 pass / 0 fail / 5 not run — E04 is not run once a key is configured), AI accuracy run — **all passed**.
+- **Playwright against the deployed site + hosted API** (`E2E_BASE_URL=https://maymourad.github.io/DOMINO/ npx playwright test`): **7 passed**, including natural language → editable proposal → human confirmation → scenario run. Local run: 6 passed (the AI test is skipped without a key).
+- **Gemini interpretation accuracy** (`scripts/ai_eval_runs.py`, `docs/benchmark-results/ai-interpretation.json`): model `gemini-3.5-flash-lite`, 12 annotated sentences, 3 runs → exact match 100 % / 100 % / 100 % (entity, type, time, uncertainty each 100 %). An earlier run with the first prompt scored 83 % and 92 % — the misses were `availability_changed` chosen for “cannot help”; the prompt now defines each type and the UI warns that `availability_changed` *replaces* availability. 12 sentences is a small set and Gemini is not fully deterministic, so treat this as a sanity check, not a general accuracy claim.
+- **Bugs found only by live testing and fixed:** `GEMINI_MODEL` set to a project id (now detected and ignored with a health warning); provider errors misclassified as rate limits (“generateContent” contains “rate”); provider call timeout too short for the first model; navigation race when a hosted household load finished after the user moved on; scenario clock displayed but not sent.
+- **Secret scan** of the deployed JS bundle: no `AIza…` key; the API URL is the only backend reference.
 
-Not executed: live Gemini calls (no API key on this machine), the hosted backend (needs the owner's Render sign-in), a full WCAG audit, Safari/Firefox runs.
+Not executed: a full WCAG audit, Safari/Firefox runs.
 
 ## Test layers
 

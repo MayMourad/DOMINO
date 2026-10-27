@@ -1,9 +1,12 @@
 # Deployment
 
-## Status (2026-10-27)
-- **GitHub repository:** https://github.com/MayMourad/DOMINO (public). CI (backend, frontend, Playwright e2e on Ubuntu) passed on the initial push.
-- **Frontend (GitHub Pages):** https://maymourad.github.io/DOMINO/ — live. Without a backend it correctly shows *API offline* and disables computation.
-- **Backend:** one-click Render Blueprint — https://render.com/deploy?repo=https://github.com/MayMourad/DOMINO — requires the owner to sign in to Render (and optionally paste `GEMINI_API_KEY` in the dashboard). After it is up, set the repository variable `API_BASE_URL` to the service URL and re-run the Pages workflow (`gh variable set API_BASE_URL --body https://<service>.onrender.com && gh workflow run pages.yml`), then verify with `python scripts/live_smoke.py https://<service>.onrender.com --origin https://maymourad.github.io`.
+## Status (2026-10-27) — deployed
+- **GitHub repository:** https://github.com/MayMourad/DOMINO (public). CI green on Ubuntu.
+- **Frontend:** https://maymourad.github.io/DOMINO/ — GitHub Pages, built by `.github/workflows/pages.yml` with `VITE_BASE_PATH=/DOMINO/` and `VITE_API_BASE_URL` from the repository variable `API_BASE_URL`.
+- **Backend:** https://domino-api-0fo2.onrender.com — Render free web service built from the root `Dockerfile` via `render.yaml` (auto-deploys on push to `main`). `CORS_ALLOWED_ORIGINS=https://maymourad.github.io`. Secrets (`GEMINI_API_KEY`) live only in the Render dashboard.
+- **Cold starts:** the free tier sleeps when idle; the first request can take tens of seconds. Open `/v1/health` before a demo to warm it.
+- **Re-verify any time:** `python scripts/live_smoke.py https://domino-api-0fo2.onrender.com --origin https://maymourad.github.io` and `E2E_BASE_URL=https://maymourad.github.io/DOMINO/ npx playwright test` (from `frontend/`).
+- **Owner action (optional):** in Render, set `GEMINI_MODEL` to `gemini-3.5-flash-lite` (it currently holds a project id, which the backend ignores with a warning).
 
 ## Details
 

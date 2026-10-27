@@ -9,3 +9,6 @@ This file indexes AI-assisted work. It does **not** contain chat transcripts, an
 Chat export location: **to be provided by the project owner** (not stored in this repository).
 
 Notable corrections made during development (kept for the report): baseline comparison initially ignored user rejections for the greedy baseline (unfair; fixed to compare only unconstrained cases); React Flow controlled-mode dimension feedback was missing (fit-view no-op; fixed); alias resolution for “car” matched two resources (fixed to prefer exact resource type).
+
+## 2026-10-27 (continuation, same Claude Code session)
+Deployed to GitHub (repo `DOMINO`), Pages and Render; ran live tests. Decisions: default model `gemini-3.5-flash-lite` (the first choice `gemini-3.8-flash` timed out at 15 s); non-model `GEMINI_MODEL` values are ignored with a health warning; prompt now defines each event type; provider errors are classified precisely and scrubbed of key-shaped text. Evidence: `docs/benchmark-results/ai-interpretation.json`, TESTING.md.
