@@ -154,7 +154,7 @@ export const useStore = create<State>((set, get) => {
         issues: [], validation: 'idle', selectedNodeId: null, cascade: { ...get().cascade, cursor: 0, playing: false } })
       persist()
       if (get().apiStatus === 'online') scheduleValidation()
-      if (goNext) get().go('network')
+      if (goNext && get().screen === 'launch') get().go('network')  // never yank a user who already navigated elsewhere
     },
 
     editHousehold: (fn) => {

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('X01: browser refresh restores the household draft', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('./')
   await page.evaluate(() => localStorage.clear())
   await page.reload()
   await page.getByRole('button', { name: /Explore The Amina Family/ }).first().click()
@@ -13,7 +13,7 @@ test('X01: browser refresh restores the household draft', async ({ page }) => {
 
 test('X02: backend outage is reported honestly and computation is disabled', async ({ page }) => {
   await page.route('**/v1/**', (r) => r.abort())
-  await page.goto('/')
+  await page.goto('./')
   await page.evaluate(() => localStorage.clear())
   await page.reload()
   await expect(page.getByText('API offline').first()).toBeVisible()
@@ -30,7 +30,7 @@ test('X02: backend outage is reported honestly and computation is disabled', asy
 
 test('X03: keyboard navigation, landmarks, reduced motion and graph text alternative', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto('/')
+  await page.goto('./')
   await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Launch/ }).first()).toHaveAttribute('aria-current', 'page')
   await page.keyboard.press('Tab')

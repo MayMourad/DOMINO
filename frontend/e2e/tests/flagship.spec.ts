@@ -3,11 +3,12 @@ import { expect, test, type Page } from '@playwright/test'
 const nav = (p: Page, name: RegExp | string) => p.getByRole('link', { name }).first().click()
 
 async function start(page: Page, card: RegExp) {
-  await page.goto('/')
+  await page.goto('./')
   await page.evaluate(() => localStorage.clear())
   await page.reload()
   await page.getByRole('button', { name: card }).first().click()
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  await expect(page).toHaveURL(/#\/network/)   // wait for the household to finish loading (slower on a hosted API)
+  await expect(page.getByText('0 errors · 0 warnings')).toBeVisible()
 }
 
 test('flagship: disruption → cascade → verified recovery → honest infeasibility → reset', async ({ page }) => {
