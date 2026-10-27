@@ -1,0 +1,415 @@
+{
+  "id": "amina",
+  "name": "The Amina Family",
+  "description": "Flagship fictional household: two authorized adult drivers, a teen who may help with homework, and a 9-year-old who depends on school pickup.",
+  "simulationDate": "2026-10-29",
+  "timezone": "Asia/Dubai",
+  "version": 1,
+  "planningStartMin": 870,
+  "planningEndMin": 1140,
+  "gridMin": 5,
+  "locations": [
+    {
+      "id": "L01",
+      "name": "Home"
+    },
+    {
+      "id": "L02",
+      "name": "School"
+    },
+    {
+      "id": "L03",
+      "name": "Grocery store"
+    }
+  ],
+  "travelMatrix": [
+    {
+      "fromId": "L01",
+      "toId": "L02",
+      "minutes": 20
+    },
+    {
+      "fromId": "L02",
+      "toId": "L01",
+      "minutes": 20
+    },
+    {
+      "fromId": "L01",
+      "toId": "L03",
+      "minutes": 12
+    },
+    {
+      "fromId": "L03",
+      "toId": "L01",
+      "minutes": 12
+    },
+    {
+      "fromId": "L02",
+      "toId": "L03",
+      "minutes": 15
+    },
+    {
+      "fromId": "L03",
+      "toId": "L02",
+      "minutes": 15
+    }
+  ],
+  "members": [
+    {
+      "id": "P01",
+      "name": "Amina",
+      "age": 41,
+      "role": "adult",
+      "isDependent": false,
+      "skills": [
+        "driving",
+        "shopping",
+        "homework_assist"
+      ],
+      "permissions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "restrictions": [],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1110
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 20
+    },
+    {
+      "id": "P02",
+      "name": "Khalid",
+      "age": 43,
+      "role": "adult",
+      "isDependent": false,
+      "skills": [
+        "driving",
+        "shopping",
+        "meal_prep"
+      ],
+      "permissions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "restrictions": [],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1110
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 30
+    },
+    {
+      "id": "P03",
+      "name": "Noura",
+      "age": 16,
+      "role": "teen",
+      "isDependent": false,
+      "skills": [
+        "homework_assist"
+      ],
+      "permissions": [],
+      "restrictions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "availability": [
+        {
+          "startMin": 990,
+          "endMin": 1080
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 45
+    },
+    {
+      "id": "P04",
+      "name": "Yusuf",
+      "age": 9,
+      "role": "child",
+      "isDependent": true,
+      "skills": [],
+      "permissions": [],
+      "restrictions": [],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [],
+      "baselineWorkloadMinutes": 0
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "School pickup",
+      "description": "Depart home, collect Yusuf from school (~15:00), return home.",
+      "tier": 0,
+      "priorityWeight": 10,
+      "durationMin": 40,
+      "earliestStartMin": 880,
+      "latestEndMin": 945,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "driving"
+      ],
+      "requiredPermissions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "vehicle",
+        "child_restraint"
+      ],
+      "resourceUnits": {
+        "vehicle": 2
+      },
+      "requiredDependentIds": [
+        "P04"
+      ],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": true,
+      "isOptional": false
+    },
+    {
+      "id": "T02",
+      "title": "Grocery collection",
+      "description": "Round trip to collect groceries.",
+      "tier": 3,
+      "priorityWeight": 2,
+      "durationMin": 35,
+      "earliestStartMin": 900,
+      "latestEndMin": 1050,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "shopping"
+      ],
+      "requiredPermissions": [
+        "drive"
+      ],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "vehicle"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    },
+    {
+      "id": "T03",
+      "title": "Homework assistance",
+      "description": "Help Yusuf with homework once he is home.",
+      "tier": 1,
+      "priorityWeight": 6,
+      "durationMin": 30,
+      "earliestStartMin": 990,
+      "latestEndMin": 1080,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "homework_assist"
+      ],
+      "requiredPermissions": [],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "study_area"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [
+        "P04"
+      ],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [
+        "M01"
+      ],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    },
+    {
+      "id": "T04",
+      "title": "Dinner preparation",
+      "description": "Prepare the family dinner.",
+      "tier": 1,
+      "priorityWeight": 6,
+      "durationMin": 30,
+      "earliestStartMin": 1020,
+      "latestEndMin": 1110,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "meal_prep"
+      ],
+      "requiredPermissions": [],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "kitchen"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "R01",
+      "name": "Family sedan",
+      "type": "vehicle",
+      "capacity": 5,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    },
+    {
+      "id": "R02",
+      "name": "Home kitchen",
+      "type": "kitchen",
+      "capacity": 1,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    },
+    {
+      "id": "R03",
+      "name": "Homework area",
+      "type": "study_area",
+      "capacity": 1,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    },
+    {
+      "id": "R04",
+      "name": "Child vehicle restraint",
+      "type": "child_restraint",
+      "capacity": 1,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M01",
+      "title": "Yusuf arrived home",
+      "enabledByTaskIds": [
+        "T01"
+      ],
+      "dependentId": "P04"
+    }
+  ],
+  "baselineAssignments": [
+    {
+      "taskId": "T01",
+      "memberId": "P01",
+      "startMin": 885,
+      "endMin": 925,
+      "resourceIds": [
+        "R01",
+        "R04"
+      ],
+      "itineraryId": "itin-school-pickup",
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T02",
+      "memberId": "P01",
+      "startMin": 955,
+      "endMin": 990,
+      "resourceIds": [
+        "R01"
+      ],
+      "itineraryId": "itin-grocery",
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T03",
+      "memberId": "P01",
+      "startMin": 1005,
+      "endMin": 1035,
+      "resourceIds": [
+        "R03"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T04",
+      "memberId": "P02",
+      "startMin": 1050,
+      "endMin": 1080,
+      "resourceIds": [
+        "R02"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+    }
+  ]
+}

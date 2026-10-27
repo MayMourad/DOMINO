@@ -1,0 +1,276 @@
+[
+ {
+  "id": "T11",
+  "title": "Multigenerational baseline",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "baseline",
+  "description": "Multigenerational baseline",
+  "expected": [
+   "Valid original schedule"
+  ],
+  "assert": {
+   "baseline_valid": true
+  },
+  "events": [],
+  "ops": []
+ },
+ {
+  "id": "T12",
+  "title": "Omar unavailable",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "recovery",
+  "description": "Omar unavailable",
+  "expected": [
+   "Pickup and errands reassigned to Mariam"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T01": "P01"
+   },
+   "expected_affected": [
+    "T01",
+    "T04",
+    "M01",
+    "T03"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-omar",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P02"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Omar unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T13",
+  "title": "Mariam unavailable",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "recovery",
+  "description": "Mariam unavailable",
+  "expected": [
+   "Check-in \u2192 Fatima, dinner \u2192 Omar"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T02": "P03",
+    "T05": "P02"
+   },
+   "expected_affected": [
+    "T02",
+    "T05"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-mariam",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Mariam unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T14",
+  "title": "Fatima unavailable",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "recovery",
+  "description": "Fatima unavailable",
+  "expected": [
+   "Only Fatima can assist with schoolwork \u2192 uncovered"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "exactly_uncovered": [
+    "T03"
+   ],
+   "critical_recovery": false,
+   "expected_affected": [
+    "T03"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-fatima",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P03"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Fatima unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T15",
+  "title": "Sedan capacity reduced",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "recovery",
+  "description": "Sedan capacity reduced",
+  "expected": [
+   "Pickup needs 2 seat-units; capacity 1 \u2192 uncovered; 1-unit grocery still fits"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "uncovered": [
+    "T01",
+    "T03"
+   ],
+   "covered": [
+    "T04"
+   ],
+   "expected_affected": [
+    "T01",
+    "T03",
+    "M01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-cap",
+    "type": "resource_capacity_changed",
+    "affectedEntityIds": [
+     "R01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Sedan seats reduced",
+    "value": 1,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T16",
+  "title": "Shared resource double-booked",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "mutation",
+  "description": "Shared resource double-booked",
+  "expected": [
+   "Two tasks on the exclusive sedan at once \u2192 verifier fails V10"
+  ],
+  "assert": {
+   "fails_rules_include": [
+    "V10"
+   ]
+  },
+  "events": [],
+  "ops": [],
+  "plan": [
+   {
+    "taskId": "T01",
+    "memberId": "P02",
+    "startMin": 900,
+    "endMin": 940,
+    "resourceIds": [
+     "R01"
+    ]
+   },
+   {
+    "taskId": "T04",
+    "memberId": "P01",
+    "startMin": 920,
+    "endMin": 960,
+    "resourceIds": [
+     "R01"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T19",
+  "title": "Multigenerational recovery rerun",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "repeat",
+  "description": "Multigenerational recovery rerun",
+  "expected": [
+   "Deterministic repeatability"
+  ],
+  "assert": {
+   "extra": {
+    "deterministic": true
+   }
+  },
+  "events": [
+   {
+    "id": "e-omar",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P02"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Omar unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "E14",
+  "title": "Multigenerational sedan unavailable",
+  "group": "multigenerational",
+  "household": "multigenerational",
+  "kind": "recovery",
+  "description": "Multigenerational sedan unavailable",
+  "expected": [
+   "Pickup, grocery and homework cannot be covered"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "uncovered": [
+    "T01",
+    "T03",
+    "T04"
+   ],
+   "critical_recovery": false
+  },
+  "events": [
+   {
+    "id": "e-sedan",
+    "type": "resource_unavailable",
+    "affectedEntityIds": [
+     "R01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Sedan unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ }
+]

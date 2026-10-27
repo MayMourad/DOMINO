@@ -1,0 +1,705 @@
+[
+ {
+  "id": "T01",
+  "title": "Amina baseline",
+  "group": "amina",
+  "household": "amina",
+  "kind": "baseline",
+  "description": "Amina baseline",
+  "expected": [
+   "All baseline assignments pass all 18 verifier rules"
+  ],
+  "assert": {
+   "baseline_valid": true
+  },
+  "events": [],
+  "ops": []
+ },
+ {
+  "id": "T02",
+  "title": "Amina unavailable",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Amina unavailable",
+  "expected": [
+   "Pickup\u2192Khalid, homework\u2192Noura, dinner stays with Khalid",
+   "Verified complete recovery",
+   "T04 not affected"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T01": "P02",
+    "T03": "P03",
+    "T04": "P02"
+   },
+   "expected_affected": [
+    "T01",
+    "T02",
+    "T03",
+    "M01"
+   ],
+   "affected_excludes": [
+    "T04"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T03",
+  "title": "Khalid unavailable during pickup",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Khalid unavailable during pickup",
+  "expected": [
+   "No unauthorized pickup assignment",
+   "T01 and T03 uncovered; dinner still covered"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "exactly_uncovered": [
+    "T01",
+    "T03"
+   ],
+   "critical_recovery": false,
+   "covered": [
+    "T02",
+    "T04"
+   ],
+   "never_assigned": {
+    "T01": [
+     "P01",
+     "P02",
+     "P03",
+     "P04"
+    ]
+   }
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   },
+   {
+    "id": "e-khalid",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P02"
+    ],
+    "startMin": 880,
+    "endMin": 940,
+    "reason": "Khalid unavailable 14:40\u201315:40",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T04",
+  "title": "Sedan unavailable",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Sedan unavailable",
+  "expected": [
+   "Vehicle-dependent tasks affected and uncovered; dinner unaffected"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "exactly_uncovered": [
+    "T01",
+    "T02",
+    "T03"
+   ],
+   "expected_affected": [
+    "T01",
+    "T02",
+    "T03",
+    "M01"
+   ],
+   "affected_excludes": [
+    "T04"
+   ],
+   "critical_recovery": false
+  },
+  "events": [
+   {
+    "id": "e-sedan",
+    "type": "resource_unavailable",
+    "affectedEntityIds": [
+     "R01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Family sedan unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T05",
+  "title": "Noura unavailable (with Amina out)",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Noura unavailable (with Amina out)",
+  "expected": [
+   "Homework has no other eligible helper \u2192 uncovered; pickup still recovered"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "exactly_uncovered": [
+    "T03"
+   ],
+   "assigned": {
+    "T01": "P02"
+   },
+   "critical_recovery": false
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   },
+   {
+    "id": "e-noura",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P03"
+    ],
+    "startMin": 990,
+    "endMin": 1080,
+    "reason": "Noura unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T06",
+  "title": "Grocery window narrowed",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Grocery window narrowed",
+  "expected": [
+   "Grocery re-timed inside 16:40\u201317:30"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "within_window": {
+    "T02": [
+     1000,
+     1050
+    ]
+   },
+   "categories": {
+    "T02": "directly_disrupted"
+   }
+  },
+  "events": [
+   {
+    "id": "e-g",
+    "type": "task_rescheduled",
+    "affectedEntityIds": [
+     "T02"
+    ],
+    "startMin": 1000,
+    "endMin": 1050,
+    "reason": "Grocery window narrowed",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T07",
+  "title": "Homework overlaps dinner for same person",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Homework overlaps dinner for same person",
+  "expected": [
+   "Only Khalid may do both at the same fixed time \u2192 exactly one covered, no double booking"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "covered_count_of": {
+    "tasks": [
+     "T03",
+     "T04"
+    ],
+    "equals": 1
+   }
+  },
+  "events": [],
+  "ops": [
+   {
+    "op": "add_skill",
+    "id": "P02",
+    "skill": "homework_assist"
+   },
+   {
+    "op": "set_task",
+    "id": "T03",
+    "fields": {
+     "eligibleMemberIds": [
+      "P02"
+     ],
+     "fixedStartMin": 1050
+    }
+   },
+   {
+    "op": "set_task",
+    "id": "T04",
+    "fields": {
+     "eligibleMemberIds": [
+      "P02"
+     ],
+     "fixedStartMin": 1050,
+     "earliestStartMin": 1020
+    }
+   }
+  ]
+ },
+ {
+  "id": "T08",
+  "title": "Pickup permission removed",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Pickup permission removed",
+  "expected": [
+   "Khalid without pickup permission is never assigned"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "uncovered": [
+    "T01"
+   ],
+   "never_assigned": {
+    "T01": [
+     "P02",
+     "P03"
+    ]
+   },
+   "critical_recovery": false
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": [
+   {
+    "op": "remove_permission",
+    "id": "P02",
+    "permission": "pickup_authorized"
+   }
+  ]
+ },
+ {
+  "id": "T09",
+  "title": "New authorized adult added",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "New authorized adult added",
+  "expected": [
+   "Candidate search includes Layla; pickup covered"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "assigned": {
+    "T01": "P05"
+   },
+   "critical_recovery": true
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   },
+   {
+    "id": "e-khalid",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P02"
+    ],
+    "startMin": 880,
+    "endMin": 940,
+    "reason": "Khalid unavailable 14:40\u201315:40",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": [
+   {
+    "op": "add_member",
+    "member": {
+     "id": "P05",
+     "name": "Layla",
+     "age": 35,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "shopping"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1110
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 0
+    }
+   }
+  ]
+ },
+ {
+  "id": "T10",
+  "title": "Disruption reset restores baseline",
+  "group": "amina",
+  "household": "amina",
+  "kind": "reset",
+  "description": "Disruption reset restores baseline",
+  "expected": [
+   "No events \u2192 plan identical to baseline, nothing changed"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "extra": {
+    "baselineRestored": true
+   }
+  },
+  "events": [],
+  "ops": []
+ },
+ {
+  "id": "T20",
+  "title": "Rejected assignment triggers fresh optimization",
+  "group": "amina",
+  "household": "amina",
+  "kind": "rejection",
+  "description": "Rejected assignment triggers fresh optimization",
+  "expected": [
+   "Rejecting Khalid for pickup \u2192 new input hash, new solve, pickup uncovered"
+  ],
+  "assert": {
+   "extra": {
+    "freshSolve": true,
+    "rejectedAbsent": true,
+    "solves": 2,
+    "newPlansValid": true
+   },
+   "uncovered": [
+    "T01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": [],
+  "reject": {
+   "taskId": "T01",
+   "memberId": "P02"
+  }
+ },
+ {
+  "id": "T30",
+  "title": "Stale scenario hash",
+  "group": "amina",
+  "household": "amina",
+  "kind": "stale",
+  "description": "Stale scenario hash",
+  "expected": [
+   "Recovery with a mismatched simulation hash is refused; verifier flags V15"
+  ],
+  "assert": {
+   "error_code": "STALE_SCENARIO",
+   "extra": {
+    "verifierRejectsStale": true
+   }
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T17",
+  "title": "Prerequisite delayed",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Prerequisite delayed",
+  "expected": [
+   "Pickup directly disrupted; homework threatened through milestone M01; dinner unaffected"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "categories": {
+    "T01": "directly_disrupted",
+    "T03": "at_risk_dependency",
+    "T04": "unaffected"
+   },
+   "expected_affected": [
+    "T01",
+    "T03",
+    "M01"
+   ],
+   "complete_recovery": true
+  },
+  "events": [
+   {
+    "id": "e-delay",
+    "type": "task_rescheduled",
+    "affectedEntityIds": [
+     "T01"
+    ],
+    "startMin": 960,
+    "endMin": 1010,
+    "reason": "School dismissal delayed",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T18",
+  "title": "Two simultaneous member disruptions",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Two simultaneous member disruptions",
+  "expected": [
+   "Both events applied consistently; dinner re-timed before Khalid leaves"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T01": "P02",
+    "T04": "P02"
+   },
+   "expected_affected": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "M01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   },
+   {
+    "id": "e-k2",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P02"
+    ],
+    "startMin": 1050,
+    "endMin": 1110,
+    "reason": "Khalid leaves at 17:30",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "E09",
+  "title": "Consent stays pending",
+  "group": "amina",
+  "household": "amina",
+  "kind": "recovery",
+  "description": "Consent stays pending",
+  "expected": [
+   "Reassigned pickup needs the new assignee's confirmation"
+  ],
+  "assert": {
+   "pending_consent": [
+    "T01"
+   ],
+   "all_plans_valid": true
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "E16",
+  "title": "Find another distinct arrangement (no-good cut)",
+  "group": "amina",
+  "household": "amina",
+  "kind": "alternative",
+  "description": "Find another distinct arrangement (no-good cut)",
+  "expected": [
+   "Excluding the first arrangement yields a different, valid arrangement with the same critical coverage"
+  ],
+  "assert": {
+   "extra": {
+    "distinct": true,
+    "altValid": true,
+    "sameCriticalCoverage": true
+   }
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "E17",
+  "title": "Deterministic repeatability (flagship)",
+  "group": "amina",
+  "household": "amina",
+  "kind": "repeat",
+  "description": "Deterministic repeatability (flagship)",
+  "expected": [
+   "Identical inputs \u2192 identical plan signatures"
+  ],
+  "assert": {
+   "extra": {
+    "deterministic": true
+   }
+  },
+  "events": [
+   {
+    "id": "e-amina",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1080,
+    "reason": "Amina unavailable 14:30\u201318:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ }
+]

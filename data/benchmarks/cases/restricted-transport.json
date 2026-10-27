@@ -1,0 +1,376 @@
+[
+ {
+  "id": "T21",
+  "title": "Restricted-transport baseline",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "baseline",
+  "description": "Restricted-transport baseline",
+  "expected": [
+   "Valid original schedule"
+  ],
+  "assert": {
+   "baseline_valid": true
+  },
+  "events": [],
+  "ops": []
+ },
+ {
+  "id": "T22",
+  "title": "Sole driver unavailable",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "Sole driver unavailable",
+  "expected": [
+   "Pickup explicitly uncovered; Rashid/Leena never assigned to drive; dinner unaffected"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "uncovered": [
+    "T01",
+    "T02",
+    "T03"
+   ],
+   "critical_recovery": false,
+   "never_assigned": {
+    "T01": [
+     "P02",
+     "P03"
+    ],
+    "T02": [
+     "P02",
+     "P03"
+    ]
+   },
+   "expected_affected": [
+    "T01",
+    "T02",
+    "T03",
+    "M01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-salma",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Salma unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T23",
+  "title": "Only vehicle unavailable",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "Only vehicle unavailable",
+  "expected": [
+   "No imaginary replacement vehicle"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "uncovered": [
+    "T01",
+    "T02"
+   ],
+   "critical_recovery": false,
+   "expected_affected": [
+    "T01",
+    "T02",
+    "T03",
+    "M01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-veh",
+    "type": "resource_unavailable",
+    "affectedEntityIds": [
+     "R01"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Vehicle unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T24",
+  "title": "Rashid driving attempted",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "mutation",
+  "description": "Rashid driving attempted",
+  "expected": [
+   "Unlicensed adult assigned to pickup \u2192 V03/V04 fail"
+  ],
+  "assert": {
+   "fails_rules_include": [
+    "V03",
+    "V04"
+   ]
+  },
+  "events": [],
+  "ops": [],
+  "plan": [
+   {
+    "taskId": "T01",
+    "memberId": "P02",
+    "startMin": 900,
+    "endMin": 940,
+    "resourceIds": [
+     "R01"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T25",
+  "title": "Leena driving attempted",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "mutation",
+  "description": "Leena driving attempted",
+  "expected": [
+   "Minor without permission assigned to pickup \u2192 rejected"
+  ],
+  "assert": {
+   "fails_rules_include": [
+    "V03",
+    "V04",
+    "V07"
+   ]
+  },
+  "events": [],
+  "ops": [],
+  "plan": [
+   {
+    "taskId": "T01",
+    "memberId": "P03",
+    "startMin": 900,
+    "endMin": 940,
+    "resourceIds": [
+     "R01"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T26",
+  "title": "School pickup uncovered",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "School pickup uncovered",
+  "expected": [
+   "Dependent prerequisite enforced: homework uncovered although Leena and Rashid are free"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "exactly_uncovered": [
+    "T01",
+    "T03"
+   ],
+   "covered": [
+    "T02",
+    "T04"
+   ],
+   "expected_affected": [
+    "T01",
+    "T03",
+    "M01"
+   ]
+  },
+  "events": [
+   {
+    "id": "e-s2",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P01"
+    ],
+    "startMin": 870,
+    "endMin": 960,
+    "reason": "Salma unavailable until 16:00",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "T27",
+  "title": "Secondary overlap introduced",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "Secondary overlap introduced",
+  "expected": [
+   "Fixed laundry (Rashid only) collides with dinner; dinner moves to Salma; no double booking"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T05": "P02",
+    "T04": "P01"
+   }
+  },
+  "events": [],
+  "ops": [
+   {
+    "op": "add_task",
+    "task": {
+     "id": "T05",
+     "title": "Laundry folding",
+     "description": "Fixed-time household chore",
+     "tier": 2,
+     "priorityWeight": 3,
+     "durationMin": 35,
+     "earliestStartMin": 1080,
+     "latestEndMin": 1115,
+     "fixedStartMin": 1080,
+     "requiredSkills": [],
+     "requiredPermissions": [],
+     "eligibleMemberIds": [
+      "P02"
+     ],
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    }
+   }
+  ]
+ },
+ {
+  "id": "T28",
+  "title": "Impossible task window",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "Impossible task window",
+  "expected": [
+   "Window shorter than duration \u2192 uncovered with explicit reason; warning issued"
+  ],
+  "assert": {
+   "issue_codes": [
+    "WINDOW_TOO_SHORT"
+   ],
+   "uncovered": [
+    "T02"
+   ],
+   "all_plans_valid": true
+  },
+  "events": [],
+  "ops": [
+   {
+    "op": "set_task",
+    "id": "T02",
+    "fields": {
+     "earliestStartMin": 1000,
+     "latestEndMin": 1020
+    }
+   }
+  ]
+ },
+ {
+  "id": "T29",
+  "title": "Invalid resource ID",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "household_validation",
+  "description": "Invalid resource ID",
+  "expected": [
+   "Reference validation rejects R99"
+  ],
+  "assert": {
+   "issue_codes": [
+    "INVALID_REFERENCE"
+   ]
+  },
+  "events": [],
+  "ops": [
+   {
+    "op": "set_baseline_resources",
+    "taskId": "T01",
+    "resourceIds": [
+     "R99"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "E15",
+  "title": "Homework support unavailable \u2192 Rashid",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "recovery",
+  "description": "Homework support unavailable \u2192 Rashid",
+  "expected": [
+   "Leena unavailable; Rashid (authorized, skilled) covers homework"
+  ],
+  "assert": {
+   "all_plans_valid": true,
+   "complete_recovery": true,
+   "assigned": {
+    "T03": "P02"
+   }
+  },
+  "events": [
+   {
+    "id": "e-leena",
+    "type": "member_unavailable",
+    "affectedEntityIds": [
+     "P03"
+    ],
+    "startMin": 870,
+    "endMin": 1140,
+    "reason": "Leena unavailable",
+    "value": null,
+    "confirmed": true
+   }
+  ],
+  "ops": []
+ },
+ {
+  "id": "E07",
+  "title": "Duplicate task IDs",
+  "group": "restricted-transport",
+  "household": "restricted-transport",
+  "kind": "household_validation",
+  "description": "Duplicate task IDs",
+  "expected": [
+   "DUPLICATE_ID reported"
+  ],
+  "assert": {
+   "issue_codes": [
+    "DUPLICATE_ID"
+   ]
+  },
+  "events": [],
+  "ops": [
+   {
+    "op": "duplicate_task",
+    "id": "T01"
+   }
+  ]
+ }
+]

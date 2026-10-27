@@ -1,0 +1,395 @@
+{
+  "id": "restricted-transport",
+  "name": "The Salma Family",
+  "description": "Fictional household with a single licensed driver and one vehicle: losing either leaves the school pickup without a legal replacement.",
+  "simulationDate": "2026-10-29",
+  "timezone": "Asia/Dubai",
+  "version": 1,
+  "planningStartMin": 870,
+  "planningEndMin": 1140,
+  "gridMin": 5,
+  "locations": [
+    {
+      "id": "L01",
+      "name": "Home"
+    },
+    {
+      "id": "L02",
+      "name": "School"
+    },
+    {
+      "id": "L03",
+      "name": "Grocery store"
+    }
+  ],
+  "travelMatrix": [
+    {
+      "fromId": "L01",
+      "toId": "L02",
+      "minutes": 20
+    },
+    {
+      "fromId": "L02",
+      "toId": "L01",
+      "minutes": 20
+    },
+    {
+      "fromId": "L01",
+      "toId": "L03",
+      "minutes": 12
+    },
+    {
+      "fromId": "L03",
+      "toId": "L01",
+      "minutes": 12
+    },
+    {
+      "fromId": "L02",
+      "toId": "L03",
+      "minutes": 15
+    },
+    {
+      "fromId": "L03",
+      "toId": "L02",
+      "minutes": 15
+    }
+  ],
+  "members": [
+    {
+      "id": "P01",
+      "name": "Salma",
+      "age": 38,
+      "role": "adult",
+      "isDependent": false,
+      "skills": [
+        "driving",
+        "shopping",
+        "meal_prep"
+      ],
+      "permissions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "restrictions": [],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 30
+    },
+    {
+      "id": "P02",
+      "name": "Rashid",
+      "age": 40,
+      "role": "adult",
+      "isDependent": false,
+      "skills": [
+        "meal_prep",
+        "homework_assist"
+      ],
+      "permissions": [],
+      "restrictions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 20
+    },
+    {
+      "id": "P03",
+      "name": "Leena",
+      "age": 17,
+      "role": "teen",
+      "isDependent": false,
+      "skills": [
+        "homework_assist"
+      ],
+      "permissions": [],
+      "restrictions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "availability": [
+        {
+          "startMin": 990,
+          "endMin": 1080
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [
+        "P04"
+      ],
+      "baselineWorkloadMinutes": 40
+    },
+    {
+      "id": "P04",
+      "name": "Ali",
+      "age": 9,
+      "role": "child",
+      "isDependent": true,
+      "skills": [],
+      "permissions": [],
+      "restrictions": [],
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "homeLocationId": "L01",
+      "authorizedDependentIds": [],
+      "baselineWorkloadMinutes": 0
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "School pickup",
+      "description": "Collect Ali from school and return home.",
+      "tier": 0,
+      "priorityWeight": 10,
+      "durationMin": 40,
+      "earliestStartMin": 890,
+      "latestEndMin": 950,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "driving"
+      ],
+      "requiredPermissions": [
+        "drive",
+        "pickup_authorized"
+      ],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "vehicle"
+      ],
+      "resourceUnits": {
+        "vehicle": 2
+      },
+      "requiredDependentIds": [
+        "P04"
+      ],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": true,
+      "isOptional": false
+    },
+    {
+      "id": "T02",
+      "title": "Grocery collection",
+      "description": "Round trip errand.",
+      "tier": 3,
+      "priorityWeight": 2,
+      "durationMin": 35,
+      "earliestStartMin": 945,
+      "latestEndMin": 1080,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "shopping"
+      ],
+      "requiredPermissions": [
+        "drive"
+      ],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "vehicle"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    },
+    {
+      "id": "T03",
+      "title": "Homework support",
+      "description": "Help Ali with homework once he is home.",
+      "tier": 1,
+      "priorityWeight": 6,
+      "durationMin": 30,
+      "earliestStartMin": 990,
+      "latestEndMin": 1080,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "homework_assist"
+      ],
+      "requiredPermissions": [],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "study_area"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [
+        "P04"
+      ],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [
+        "M01"
+      ],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    },
+    {
+      "id": "T04",
+      "title": "Dinner preparation",
+      "description": "Prepare the family dinner.",
+      "tier": 1,
+      "priorityWeight": 6,
+      "durationMin": 35,
+      "earliestStartMin": 1050,
+      "latestEndMin": 1140,
+      "fixedStartMin": null,
+      "requiredSkills": [
+        "meal_prep"
+      ],
+      "requiredPermissions": [],
+      "eligibleMemberIds": null,
+      "excludedMemberIds": [],
+      "requiredResourceTypes": [
+        "kitchen"
+      ],
+      "resourceUnits": {},
+      "requiredDependentIds": [],
+      "predecessorTaskIds": [],
+      "requiredMilestoneIds": [],
+      "originLocationId": "L01",
+      "destinationLocationId": "L01",
+      "requiredConsent": false,
+      "isOptional": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "R01",
+      "name": "Family vehicle",
+      "type": "vehicle",
+      "capacity": 5,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    },
+    {
+      "id": "R02",
+      "name": "Home study space",
+      "type": "study_area",
+      "capacity": 1,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    },
+    {
+      "id": "R03",
+      "name": "Kitchen",
+      "type": "kitchen",
+      "capacity": 1,
+      "exclusive": true,
+      "availability": [
+        {
+          "startMin": 870,
+          "endMin": 1140
+        }
+      ],
+      "unavailableWindows": [],
+      "locationId": "L01",
+      "restrictions": [],
+      "allowedMemberIds": null
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M01",
+      "title": "Ali arrived home",
+      "enabledByTaskIds": [
+        "T01"
+      ],
+      "dependentId": "P04"
+    }
+  ],
+  "baselineAssignments": [
+    {
+      "taskId": "T01",
+      "memberId": "P01",
+      "startMin": 900,
+      "endMin": 940,
+      "resourceIds": [
+        "R01"
+      ],
+      "itineraryId": "itin-school-pickup",
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T02",
+      "memberId": "P01",
+      "startMin": 960,
+      "endMin": 995,
+      "resourceIds": [
+        "R01"
+      ],
+      "itineraryId": "itin-grocery",
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T03",
+      "memberId": "P03",
+      "startMin": 1020,
+      "endMin": 1050,
+      "resourceIds": [
+        "R02"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+    },
+    {
+      "taskId": "T04",
+      "memberId": "P02",
+      "startMin": 1080,
+      "endMin": 1115,
+      "resourceIds": [
+        "R03"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+    }
+  ]
+}

@@ -1,0 +1,2742 @@
+{
+ "executedAt": "2026-10-27T16:53:17+00:00",
+ "environment": {
+  "python": "3.14.6",
+  "ortools": "9.15.6755",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "cpuCount": 8,
+  "engine": "domino-engine/1.0.0",
+  "solverWorkers": 1,
+  "solverSeed": 1,
+  "solverTimeLimitSecondsPerStrategy": 2.0
+ },
+ "totalCases": 50,
+ "counts": {
+  "pass": 46,
+  "fail": 0,
+  "not_run": 4
+ },
+ "wallClockMs": 5052.6,
+ "latency": {
+  "observations": 27,
+  "medianMs": 189.1,
+  "p95Ms": 333.39
+ },
+ "dependencyDetection": {
+  "cases": 11,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0
+ },
+ "baselineComparison": {
+  "cases": 21,
+  "domino": {
+   "meanWeightedCoverage": 0.7152,
+   "casesWithUncoveredCritical": 10,
+   "allValid": true,
+   "meanChanges": 2.48
+  },
+  "greedy": {
+   "meanWeightedCoverage": 0.7112,
+   "casesWithUncoveredCritical": 10,
+   "allValid": true,
+   "meanChanges": 3.14
+  },
+  "noRecovery": {
+   "meanWeightedCoverage": 0.366,
+   "casesWithUncoveredCritical": 20,
+   "allValid": true,
+   "meanChanges": 0
+  },
+  "dominoBeatsGreedyCritical": 0,
+  "greedyBeatsDominoCritical": 0
+ },
+ "results": [
+  {
+   "id": "T01",
+   "title": "Amina baseline",
+   "group": "amina",
+   "kind": "baseline",
+   "status": "pass",
+   "expected": [
+    "All baseline assignments pass all 18 verifier rules"
+   ],
+   "observed": [
+    "baseline status=valid, violations=0"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 5.08,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T02",
+   "title": "Amina unavailable",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup\u2192Khalid, homework\u2192Noura, dinner stays with Khalid",
+    "Verified complete recovery",
+    "T04 not affected"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P02@885, T02\u2192P02@955, T03\u2192P03@1005, T04\u2192P02@1050",
+    "affected tasks/milestones=['M01', 'T01', 'T02', 'T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 202.8,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 3,
+      "runtimeMs": 72.67,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.75,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.359,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 72.67,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 72.67
+     },
+     "candidates": 56
+    },
+    "dependency": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T03",
+   "title": "Khalid unavailable during pickup",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "No unauthorized pickup assignment",
+    "T01 and T03 uncovered; dinner still covered"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T03']",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']",
+    "covered=['T02', 'T04']",
+    "checked 1 plan(s) for forbidden assignees"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 91.82,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 24.43,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 2,
+      "runtimeMs": 1.283,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.397,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 24.43,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 24.43
+     },
+     "candidates": 42
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     },
+     {
+      "id": "e-khalid",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P02"
+      ],
+      "startMin": 880,
+      "endMin": 940,
+      "reason": "Khalid unavailable 14:40\u201315:40",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T04",
+   "title": "Sedan unavailable",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Vehicle-dependent tasks affected and uncovered; dinner unaffected"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T02', 'T03']",
+    "affected tasks/milestones=['M01', 'T01', 'T02', 'T03']; P=1.00 R=1.00 F1=1.00",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 58.12,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 13.36,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 1,
+      "runtimeMs": 1.783,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.442,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 13.36,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 13.36
+     },
+     "candidates": 39
+    },
+    "dependency": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-sedan",
+      "type": "resource_unavailable",
+      "affectedEntityIds": [
+       "R01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Family sedan unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T05",
+   "title": "Noura unavailable (with Amina out)",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Homework has no other eligible helper \u2192 uncovered; pickup still recovered"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T03']",
+    "assignments=T01\u2192P02@885, T02\u2192P02@955, T04\u2192P02@1050",
+    "criticalRecovery=False; uncoveredCritical=['T03']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 136.63,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.75,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 30.73,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.75,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 1.201,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.589,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 30.73,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 30.73
+     },
+     "candidates": 43
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     },
+     {
+      "id": "e-noura",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P03"
+      ],
+      "startMin": 990,
+      "endMin": 1080,
+      "reason": "Noura unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T06",
+   "title": "Grocery window narrowed",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Grocery re-timed inside 16:40\u201317:30"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "categories={\"T02\": \"directly_disrupted\"}"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 198.37,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 1,
+      "runtimeMs": 52.65,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.9167,
+      "criticalUncovered": [],
+      "changes": 3,
+      "runtimeMs": 1.303,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.9167,
+      "criticalUncovered": [],
+      "changes": 0,
+      "runtimeMs": 0.389,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 52.65,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 52.65,
+      "balanced_workload": 78.79
+     },
+     "candidates": 59
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-g",
+      "type": "task_rescheduled",
+      "affectedEntityIds": [
+       "T02"
+      ],
+      "startMin": 1000,
+      "endMin": 1050,
+      "reason": "Grocery window narrowed",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T07",
+   "title": "Homework overlaps dinner for same person",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Only Khalid may do both at the same fixed time \u2192 exactly one covered, no double booking"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "1 of ['T03', 'T04'] covered"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 162.21,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 40.02,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 40.02
+     },
+     "candidates": 62
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [
+     {
+      "op": "add_skill",
+      "id": "P02",
+      "skill": "homework_assist"
+     },
+     {
+      "op": "set_task",
+      "id": "T03",
+      "fields": {
+       "eligibleMemberIds": [
+        "P02"
+       ],
+       "fixedStartMin": 1050
+      }
+     },
+     {
+      "op": "set_task",
+      "id": "T04",
+      "fields": {
+       "eligibleMemberIds": [
+        "P02"
+       ],
+       "fixedStartMin": 1050,
+       "earliestStartMin": 1020
+      }
+     }
+    ],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T08",
+   "title": "Pickup permission removed",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Khalid without pickup permission is never assigned"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T03']",
+    "checked 1 plan(s) for forbidden assignees",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 107.83,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 27.4,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 2,
+      "runtimeMs": 1.223,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.427,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 27.4,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 27.4
+     },
+     "candidates": 50
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [
+     {
+      "op": "remove_permission",
+      "id": "P02",
+      "permission": "pickup_authorized"
+     }
+    ],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T09",
+   "title": "New authorized adult added",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Candidate search includes Layla; pickup covered"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "assignments=T01\u2192P05@885, T02\u2192P05@955, T03\u2192P03@1005, T04\u2192P02@1050",
+    "criticalRecovery=True; uncoveredCritical=[]"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 197.38,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 3,
+      "runtimeMs": 51.23,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.765,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.406,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 51.23,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 51.23
+     },
+     "candidates": 72
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [
+     {
+      "op": "add_member",
+      "member": {
+       "id": "P05",
+       "name": "Layla",
+       "age": 35,
+       "role": "adult",
+       "isDependent": false,
+       "skills": [
+        "driving",
+        "shopping"
+       ],
+       "permissions": [
+        "drive",
+        "pickup_authorized"
+       ],
+       "restrictions": [],
+       "availability": [
+        {
+         "startMin": 870,
+         "endMin": 1110
+        }
+       ],
+       "homeLocationId": "L01",
+       "authorizedDependentIds": [
+        "P04"
+       ],
+       "baselineWorkloadMinutes": 0
+      }
+     }
+    ],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     },
+     {
+      "id": "e-khalid",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P02"
+      ],
+      "startMin": 880,
+      "endMin": 940,
+      "reason": "Khalid unavailable 14:40\u201315:40",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T10",
+   "title": "Disruption reset restores baseline",
+   "group": "amina",
+   "kind": "reset",
+   "status": "pass",
+   "expected": [
+    "No events \u2192 plan identical to baseline, nothing changed"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "baselineRestored=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 280.71,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 78.11,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 78.11,
+      "balanced_workload": 118.49
+     },
+     "candidates": 99
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T20",
+   "title": "Rejected assignment triggers fresh optimization",
+   "group": "amina",
+   "kind": "rejection",
+   "status": "pass",
+   "expected": [
+    "Rejecting Khalid for pickup \u2192 new input hash, new solve, pickup uncovered"
+   ],
+   "observed": [
+    "freshSolve=True",
+    "rejectedAbsent=True",
+    "solves=2",
+    "newPlansValid=True",
+    "uncovered=['T01', 'T03']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 278.64,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 24.91,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 24.91
+     },
+     "candidates": 50
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": {
+     "taskId": "T01",
+     "memberId": "P02"
+    },
+    "check": null
+   }
+  },
+  {
+   "id": "T30",
+   "title": "Stale scenario hash",
+   "group": "amina",
+   "kind": "stale",
+   "status": "pass",
+   "expected": [
+    "Recovery with a mismatched simulation hash is refused; verifier flags V15"
+   ],
+   "observed": [
+    "error=STALE_SCENARIO",
+    "verifierRejectsStale=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 3.71,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T17",
+   "title": "Prerequisite delayed",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup directly disrupted; homework threatened through milestone M01; dinner unaffected"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "categories={\"T01\": \"directly_disrupted\", \"T03\": \"at_risk_dependency\", \"T04\": \"unaffected\"}",
+    "affected tasks/milestones=['M01', 'T01', 'T03']; P=1.00 R=1.00 F1=1.00",
+    "completeRecovery=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 218.02,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 2,
+      "runtimeMs": 58.82,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 2.052,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.4,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 58.82,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 58.82,
+      "balanced_workload": 84.31
+     },
+     "candidates": 93
+    },
+    "dependency": {
+     "tp": 3,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-delay",
+      "type": "task_rescheduled",
+      "affectedEntityIds": [
+       "T01"
+      ],
+      "startMin": 960,
+      "endMin": 1010,
+      "reason": "School dismissal delayed",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T18",
+   "title": "Two simultaneous member disruptions",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Both events applied consistently; dinner re-timed before Khalid leaves"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P02@885, T02\u2192P02@955, T03\u2192P03@1005, T04\u2192P02@1020",
+    "affected tasks/milestones=['M01', 'T01', 'T02', 'T03', 'T04']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 127.35,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 28.41,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.641,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.0,
+      "criticalUncovered": [
+       "T01",
+       "T03",
+       "T04"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.785,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 28.41,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 28.41
+     },
+     "candidates": 44
+    },
+    "dependency": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     },
+     {
+      "id": "e-k2",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P02"
+      ],
+      "startMin": 1050,
+      "endMin": 1110,
+      "reason": "Khalid leaves at 17:30",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E09",
+   "title": "Consent stays pending",
+   "group": "amina",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Reassigned pickup needs the new assignee's confirmation"
+   ],
+   "observed": [
+    "pendingConsent=['T01']",
+    "all plans independently valid=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 169.55,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 3,
+      "runtimeMs": 38.09,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.374,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.424,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 38.09,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 38.09
+     },
+     "candidates": 56
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E16",
+   "title": "Find another distinct arrangement (no-good cut)",
+   "group": "amina",
+   "kind": "alternative",
+   "status": "pass",
+   "expected": [
+    "Excluding the first arrangement yields a different, valid arrangement with the same critical coverage"
+   ],
+   "observed": [
+    "distinct=True",
+    "altValid=True",
+    "sameCriticalCoverage=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 218.83,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 40.56,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 40.56
+     },
+     "candidates": 56
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E17",
+   "title": "Deterministic repeatability (flagship)",
+   "group": "amina",
+   "kind": "repeat",
+   "status": "pass",
+   "expected": [
+    "Identical inputs \u2192 identical plan signatures"
+   ],
+   "observed": [
+    "deterministic=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 333.39,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 3,
+      "runtimeMs": 46.24,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.671,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.374,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 46.24,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 46.24
+     },
+     "candidates": 56
+    }
+   },
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-amina",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1080,
+      "reason": "Amina unavailable 14:30\u201318:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T11",
+   "title": "Multigenerational baseline",
+   "group": "multigenerational",
+   "kind": "baseline",
+   "status": "pass",
+   "expected": [
+    "Valid original schedule"
+   ],
+   "observed": [
+    "baseline status=valid, violations=0"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 3.34,
+   "metrics": {},
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T12",
+   "title": "Omar unavailable",
+   "group": "multigenerational",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup and errands reassigned to Mariam"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P01@900, T02\u2192P01@960, T03\u2192P03@990, T04\u2192P01@1020, T05\u2192P01@1080",
+    "affected tasks/milestones=['M01', 'T01', 'T03', 'T04']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 231.19,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 2,
+      "runtimeMs": 69.28,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 5,
+      "runtimeMs": 1.269,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.432,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 69.28,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 69.28,
+      "balanced_workload": 86.39
+     },
+     "candidates": 63
+    },
+    "dependency": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-omar",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P02"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Omar unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T13",
+   "title": "Mariam unavailable",
+   "group": "multigenerational",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Check-in \u2192 Fatima, dinner \u2192 Omar"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P02@900, T02\u2192P03@960, T03\u2192P03@990, T04\u2192P02@1020, T05\u2192P02@1080",
+    "affected tasks/milestones=['T02', 'T05']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 178.12,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 2,
+      "runtimeMs": 45.88,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 5,
+      "runtimeMs": 1.502,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.6667,
+      "criticalUncovered": [
+       "T05"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.817,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 45.88,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 45.88
+     },
+     "candidates": 51
+    },
+    "dependency": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-mariam",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Mariam unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T14",
+   "title": "Fatima unavailable",
+   "group": "multigenerational",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Only Fatima can assist with schoolwork \u2192 uncovered"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T03']",
+    "criticalRecovery=False; uncoveredCritical=['T03']",
+    "affected tasks/milestones=['T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 206.94,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.7778,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 1,
+      "runtimeMs": 54.83,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.7778,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 4,
+      "runtimeMs": 1.349,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.7778,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.399,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 54.83,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 54.83
+     },
+     "candidates": 70
+    },
+    "dependency": {
+     "tp": 1,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-fatima",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P03"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Fatima unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T15",
+   "title": "Sedan capacity reduced",
+   "group": "multigenerational",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup needs 2 seat-units; capacity 1 \u2192 uncovered; 1-unit grocery still fits"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T03']",
+    "covered=['T02', 'T04', 'T05']",
+    "affected tasks/milestones=['M01', 'T01', 'T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 191.28,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.4074,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 2,
+      "runtimeMs": 45.71,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.4074,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 1.428,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.4074,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 1.73,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 45.71,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 45.71,
+      "balanced_workload": 77.31
+     },
+     "candidates": 82
+    },
+    "dependency": {
+     "tp": 3,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-cap",
+      "type": "resource_capacity_changed",
+      "affectedEntityIds": [
+       "R01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Sedan seats reduced",
+      "value": 1,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T16",
+   "title": "Shared resource double-booked",
+   "group": "multigenerational",
+   "kind": "mutation",
+   "status": "pass",
+   "expected": [
+    "Two tasks on the exclusive sedan at once \u2192 verifier fails V10"
+   ],
+   "observed": [
+    "status=invalid; failed rules=['V06', 'V10']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 2.47,
+   "metrics": {},
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T19",
+   "title": "Multigenerational recovery rerun",
+   "group": "multigenerational",
+   "kind": "repeat",
+   "status": "pass",
+   "expected": [
+    "Deterministic repeatability"
+   ],
+   "observed": [
+    "deterministic=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 419.74,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 2,
+      "runtimeMs": 57.3,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 5,
+      "runtimeMs": 1.181,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.438,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 57.3,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 57.3,
+      "balanced_workload": 75.37
+     },
+     "candidates": 63
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-omar",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P02"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Omar unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E14",
+   "title": "Multigenerational sedan unavailable",
+   "group": "multigenerational",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup, grocery and homework cannot be covered"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T03', 'T04']",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 113.11,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 27.19,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 2,
+      "runtimeMs": 1.583,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.419,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 27.19,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change": 27.19,
+      "balanced_workload": 42.08
+     },
+     "candidates": 56
+    }
+   },
+   "inputs": {
+    "household": "multigenerational",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-sedan",
+      "type": "resource_unavailable",
+      "affectedEntityIds": [
+       "R01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Sedan unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T21",
+   "title": "Restricted-transport baseline",
+   "group": "restricted-transport",
+   "kind": "baseline",
+   "status": "pass",
+   "expected": [
+    "Valid original schedule"
+   ],
+   "observed": [
+    "baseline status=valid, violations=0"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 2.82,
+   "metrics": {},
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T22",
+   "title": "Sole driver unavailable",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Pickup explicitly uncovered; Rashid/Leena never assigned to drive; dinner unaffected"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T02', 'T03']",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']",
+    "checked 1 plan(s) for forbidden assignees",
+    "affected tasks/milestones=['M01', 'T01', 'T02', 'T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 55.08,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 11.47,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 1,
+      "runtimeMs": 0.924,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.357,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 11.47,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 11.47
+     },
+     "candidates": 38
+    },
+    "dependency": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-salma",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Salma unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T23",
+   "title": "Only vehicle unavailable",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "No imaginary replacement vehicle"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T02', 'T03']",
+    "criticalRecovery=False; uncoveredCritical=['T01', 'T03']",
+    "affected tasks/milestones=['M01', 'T01', 'T02', 'T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 67.31,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 3,
+      "runtimeMs": 14.27,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 1,
+      "runtimeMs": 1.598,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.25,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.366,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 14.27,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 14.27
+     },
+     "candidates": 50
+    },
+    "dependency": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-veh",
+      "type": "resource_unavailable",
+      "affectedEntityIds": [
+       "R01"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Vehicle unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T24",
+   "title": "Rashid driving attempted",
+   "group": "restricted-transport",
+   "kind": "mutation",
+   "status": "pass",
+   "expected": [
+    "Unlicensed adult assigned to pickup \u2192 V03/V04 fail"
+   ],
+   "observed": [
+    "status=invalid; failed rules=['V03', 'V04']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 2.15,
+   "metrics": {},
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T25",
+   "title": "Leena driving attempted",
+   "group": "restricted-transport",
+   "kind": "mutation",
+   "status": "pass",
+   "expected": [
+    "Minor without permission assigned to pickup \u2192 rejected"
+   ],
+   "observed": [
+    "status=invalid; failed rules=['V03', 'V04', 'V07']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.45,
+   "metrics": {},
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T26",
+   "title": "School pickup uncovered",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Dependent prerequisite enforced: homework uncovered although Leena and Rashid are free"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "uncovered=['T01', 'T03']",
+    "covered=['T02', 'T04']",
+    "affected tasks/milestones=['M01', 'T01', 'T03']; P=1.00 R=1.00 F1=1.00"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 114.51,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 2,
+      "runtimeMs": 32.38,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 1,
+      "runtimeMs": 2.362,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.3333,
+      "criticalUncovered": [
+       "T01",
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.426,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 32.38,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 32.38
+     },
+     "candidates": 68
+    },
+    "dependency": {
+     "tp": 3,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-s2",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P01"
+      ],
+      "startMin": 870,
+      "endMin": 960,
+      "reason": "Salma unavailable until 16:00",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T27",
+   "title": "Secondary overlap introduced",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Fixed laundry (Rashid only) collides with dinner; dinner moves to Salma; no double booking"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P01@900, T02\u2192P01@960, T03\u2192P03@1020, T04\u2192P01@1080, T05\u2192P02@1080"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 233.75,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 60.84,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 60.84
+     },
+     "candidates": 77
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [
+     {
+      "op": "add_task",
+      "task": {
+       "id": "T05",
+       "title": "Laundry folding",
+       "description": "Fixed-time household chore",
+       "tier": 2,
+       "priorityWeight": 3,
+       "durationMin": 35,
+       "earliestStartMin": 1080,
+       "latestEndMin": 1115,
+       "fixedStartMin": 1080,
+       "requiredSkills": [],
+       "requiredPermissions": [],
+       "eligibleMemberIds": [
+        "P02"
+       ],
+       "excludedMemberIds": [],
+       "requiredResourceTypes": [],
+       "resourceUnits": {},
+       "requiredDependentIds": [],
+       "predecessorTaskIds": [],
+       "requiredMilestoneIds": [],
+       "originLocationId": "L01",
+       "destinationLocationId": "L01",
+       "requiredConsent": false,
+       "isOptional": false
+      }
+     }
+    ],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T28",
+   "title": "Impossible task window",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Window shorter than duration \u2192 uncovered with explicit reason; warning issued"
+   ],
+   "observed": [
+    "issue codes=['BASELINE_INVALID', 'WINDOW_TOO_SHORT']",
+    "uncovered=['T02']",
+    "all plans independently valid=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 150.25,
+   "metrics": {
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 41.02,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 41.02
+     },
+     "candidates": 55
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [
+     {
+      "op": "set_task",
+      "id": "T02",
+      "fields": {
+       "earliestStartMin": 1000,
+       "latestEndMin": 1020
+      }
+     }
+    ],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "T29",
+   "title": "Invalid resource ID",
+   "group": "restricted-transport",
+   "kind": "household_validation",
+   "status": "pass",
+   "expected": [
+    "Reference validation rejects R99"
+   ],
+   "observed": [
+    "issue codes=['INVALID_REFERENCE']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.26,
+   "metrics": {},
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [
+     {
+      "op": "set_baseline_resources",
+      "taskId": "T01",
+      "resourceIds": [
+       "R99"
+      ]
+     }
+    ],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E15",
+   "title": "Homework support unavailable \u2192 Rashid",
+   "group": "restricted-transport",
+   "kind": "recovery",
+   "status": "pass",
+   "expected": [
+    "Leena unavailable; Rashid (authorized, skilled) covers homework"
+   ],
+   "observed": [
+    "all plans independently valid=True",
+    "completeRecovery=True",
+    "assignments=T01\u2192P01@900, T02\u2192P01@960, T03\u2192P02@1020, T04\u2192P02@1080"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 189.1,
+   "metrics": {
+    "comparison": {
+     "domino": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 1,
+      "runtimeMs": 52.42,
+      "valid": true
+     },
+     "greedy": {
+      "weightedCoverage": 1.0,
+      "criticalUncovered": [],
+      "changes": 4,
+      "runtimeMs": 1.288,
+      "valid": true
+     },
+     "noRecovery": {
+      "weightedCoverage": 0.75,
+      "criticalUncovered": [
+       "T03"
+      ],
+      "changes": 0,
+      "runtimeMs": 0.36,
+      "valid": true
+     }
+    },
+    "solver": {
+     "status": "OPTIMAL",
+     "elapsedMs": 52.42,
+     "strategyElapsedMs": {
+      "priority_first+minimum_change+balanced_workload": 52.42
+     },
+     "candidates": 63
+    }
+   },
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [],
+    "events": [
+     {
+      "id": "e-leena",
+      "type": "member_unavailable",
+      "affectedEntityIds": [
+       "P03"
+      ],
+      "startMin": 870,
+      "endMin": 1140,
+      "reason": "Leena unavailable",
+      "value": null,
+      "confirmed": true
+     }
+    ],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E07",
+   "title": "Duplicate task IDs",
+   "group": "restricted-transport",
+   "kind": "household_validation",
+   "status": "pass",
+   "expected": [
+    "DUPLICATE_ID reported"
+   ],
+   "observed": [
+    "issue codes=['DUPLICATE_ID']"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.49,
+   "metrics": {},
+   "inputs": {
+    "household": "restricted-transport",
+    "ops": [
+     {
+      "op": "duplicate_task",
+      "id": "T01"
+     }
+    ],
+    "events": [],
+    "reject": null,
+    "check": null
+   }
+  },
+  {
+   "id": "E01",
+   "title": "Prompt injection ignored",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Instruction-like text produces a warning; event stays unconfirmed; unsupported request dropped"
+   ],
+   "observed": [
+    "warned=True",
+    "confirmedFlag=False",
+    "events=1",
+    "unsupportedIgnored=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.25,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "prompt_injection"
+   }
+  },
+  {
+   "id": "E02",
+   "title": "Unknown person names flagged",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Unknown 'Zayed' is never invented as an entity"
+   ],
+   "observed": [
+    "status='invalid'",
+    "unresolved=['Zayed']",
+    "events=0"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.6,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "unknown_names"
+   }
+  },
+  {
+   "id": "E03",
+   "title": "Ambiguous time expression",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "'until 6 PM' without a scenario clock needs clarification"
+   ],
+   "observed": [
+    "status='needs_clarification'",
+    "needsConfirmation=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.51,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "ambiguous_time"
+   }
+  },
+  {
+   "id": "E04",
+   "title": "Missing Gemini credentials",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Honest 503 AI_UNAVAILABLE; manual form still works"
+   ],
+   "observed": [
+    "code='AI_UNAVAILABLE'",
+    "status=503"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.64,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "missing_credentials"
+   }
+  },
+  {
+   "id": "E05",
+   "title": "Solver timeout status mapping",
+   "group": "solver",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "UNKNOWN is preserved, never relabelled"
+   ],
+   "observed": [
+    "mapped='UNKNOWN'",
+    "optimal='OPTIMAL'",
+    "infeasible='INFEASIBLE'"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.08,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "solver_unknown_status"
+   }
+  },
+  {
+   "id": "E06",
+   "title": "Invalid solver model",
+   "group": "solver",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Invalid CP-SAT model reported as MODEL_INVALID, not solved"
+   ],
+   "observed": [
+    "status='MODEL_INVALID'"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 2.24,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "solver_invalid_model"
+   }
+  },
+  {
+   "id": "E08",
+   "title": "Graph dependency cycle detected",
+   "group": "graph",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Cyclic prerequisites are rejected"
+   ],
+   "observed": [
+    "cycleDetected=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 1.09,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "dependency_cycle"
+   }
+  },
+  {
+   "id": "E10",
+   "title": "Unconfirmed event rejected",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Unconfirmed events never reach the solver"
+   ],
+   "observed": [
+    "code='UNCONFIRMED_EVENT'"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.54,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "event_unconfirmed"
+   }
+  },
+  {
+   "id": "E11",
+   "title": "Graph edges are typed",
+   "group": "graph",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Only declared edge types exist; depends_on and enables present"
+   ],
+   "observed": [
+    "allEdgeTypesValid=True",
+    "hasDependsOn=True",
+    "hasEnables=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.57,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "graph_edges_typed"
+   }
+  },
+  {
+   "id": "E12",
+   "title": "Duplicate display names not guessed",
+   "group": "ai",
+   "kind": "system",
+   "status": "pass",
+   "expected": [
+    "Two members named 'Amina' \u2192 ambiguity, no guess"
+   ],
+   "observed": [
+    "ambiguousNotGuessed=True"
+   ],
+   "failures": [],
+   "notRunReason": null,
+   "elapsedMs": 0.79,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "duplicate_names"
+   }
+  },
+  {
+   "id": "X01",
+   "title": "Browser refresh restores draft",
+   "group": "frontend",
+   "kind": "system",
+   "status": "not_run",
+   "expected": [
+    "Executed by Playwright"
+   ],
+   "observed": [],
+   "failures": [],
+   "notRunReason": "Executed by the Playwright suite (frontend/e2e/tests/resilience.spec.ts); see TESTING.md.",
+   "elapsedMs": 0.44,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "external"
+   }
+  },
+  {
+   "id": "X02",
+   "title": "API unavailability handled",
+   "group": "frontend",
+   "kind": "system",
+   "status": "not_run",
+   "expected": [
+    "Executed by Playwright"
+   ],
+   "observed": [],
+   "failures": [],
+   "notRunReason": "Executed by the Playwright suite (frontend/e2e/tests/resilience.spec.ts); see TESTING.md.",
+   "elapsedMs": 0.41,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "external"
+   }
+  },
+  {
+   "id": "X03",
+   "title": "Accessibility checks",
+   "group": "frontend",
+   "kind": "system",
+   "status": "not_run",
+   "expected": [
+    "Executed by Playwright"
+   ],
+   "observed": [],
+   "failures": [],
+   "notRunReason": "Keyboard/landmark/reduced-motion checks run in frontend/e2e/tests/resilience.spec.ts; no full WCAG audit has been performed.",
+   "elapsedMs": 0.38,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "external"
+   }
+  },
+  {
+   "id": "X04",
+   "title": "GitHub Pages base path",
+   "group": "frontend",
+   "kind": "system",
+   "status": "not_run",
+   "expected": [
+    "Checked by the production build"
+   ],
+   "observed": [],
+   "failures": [],
+   "notRunReason": "Checked by building with VITE_BASE_PATH=/DOMINO/ and loading the preview; see TESTING.md.",
+   "elapsedMs": 0.49,
+   "metrics": {},
+   "inputs": {
+    "household": "amina",
+    "ops": [],
+    "events": [],
+    "reject": null,
+    "check": "external"
+   }
+  }
+ ],
+ "methodology": "Each case loads a fixture, applies declared edits/events, runs the real engine, and checks declared invariants with the independent verifier. See EVALUATION_METHODOLOGY.md."
+}

@@ -1,0 +1,269 @@
+[
+ {
+  "id": "E01",
+  "title": "Prompt injection ignored",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Prompt injection ignored",
+  "expected": [
+   "Instruction-like text produces a warning; event stays unconfirmed; unsupported request dropped"
+  ],
+  "assert": {
+   "extra": {
+    "warned": true,
+    "confirmedFlag": false,
+    "events": 1,
+    "unsupportedIgnored": true
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "prompt_injection"
+ },
+ {
+  "id": "E02",
+  "title": "Unknown person names flagged",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Unknown person names flagged",
+  "expected": [
+   "Unknown 'Zayed' is never invented as an entity"
+  ],
+  "assert": {
+   "extra": {
+    "status": "invalid",
+    "unresolved": [
+     "Zayed"
+    ],
+    "events": 0
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "unknown_names"
+ },
+ {
+  "id": "E03",
+  "title": "Ambiguous time expression",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Ambiguous time expression",
+  "expected": [
+   "'until 6 PM' without a scenario clock needs clarification"
+  ],
+  "assert": {
+   "extra": {
+    "status": "needs_clarification",
+    "needsConfirmation": true
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "ambiguous_time"
+ },
+ {
+  "id": "E04",
+  "title": "Missing Gemini credentials",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Missing Gemini credentials",
+  "expected": [
+   "Honest 503 AI_UNAVAILABLE; manual form still works"
+  ],
+  "assert": {
+   "extra": {
+    "code": "AI_UNAVAILABLE",
+    "status": 503
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "missing_credentials"
+ },
+ {
+  "id": "E05",
+  "title": "Solver timeout status mapping",
+  "group": "solver",
+  "household": "amina",
+  "kind": "system",
+  "description": "Solver timeout status mapping",
+  "expected": [
+   "UNKNOWN is preserved, never relabelled"
+  ],
+  "assert": {
+   "extra": {
+    "mapped": "UNKNOWN",
+    "optimal": "OPTIMAL",
+    "infeasible": "INFEASIBLE"
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "solver_unknown_status"
+ },
+ {
+  "id": "E06",
+  "title": "Invalid solver model",
+  "group": "solver",
+  "household": "amina",
+  "kind": "system",
+  "description": "Invalid solver model",
+  "expected": [
+   "Invalid CP-SAT model reported as MODEL_INVALID, not solved"
+  ],
+  "assert": {
+   "extra": {
+    "status": "MODEL_INVALID"
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "solver_invalid_model"
+ },
+ {
+  "id": "E08",
+  "title": "Graph dependency cycle detected",
+  "group": "graph",
+  "household": "amina",
+  "kind": "system",
+  "description": "Graph dependency cycle detected",
+  "expected": [
+   "Cyclic prerequisites are rejected"
+  ],
+  "assert": {
+   "extra": {
+    "cycleDetected": true
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "dependency_cycle"
+ },
+ {
+  "id": "E10",
+  "title": "Unconfirmed event rejected",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Unconfirmed event rejected",
+  "expected": [
+   "Unconfirmed events never reach the solver"
+  ],
+  "assert": {
+   "extra": {
+    "code": "UNCONFIRMED_EVENT"
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "event_unconfirmed"
+ },
+ {
+  "id": "E11",
+  "title": "Graph edges are typed",
+  "group": "graph",
+  "household": "amina",
+  "kind": "system",
+  "description": "Graph edges are typed",
+  "expected": [
+   "Only declared edge types exist; depends_on and enables present"
+  ],
+  "assert": {
+   "extra": {
+    "allEdgeTypesValid": true,
+    "hasDependsOn": true,
+    "hasEnables": true
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "graph_edges_typed"
+ },
+ {
+  "id": "E12",
+  "title": "Duplicate display names not guessed",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Duplicate display names not guessed",
+  "expected": [
+   "Two members named 'Amina' \u2192 ambiguity, no guess"
+  ],
+  "assert": {
+   "extra": {
+    "ambiguousNotGuessed": true
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "duplicate_names"
+ },
+ {
+  "id": "X01",
+  "title": "Browser refresh restores draft",
+  "group": "frontend",
+  "household": "amina",
+  "kind": "system",
+  "description": "Browser refresh restores draft",
+  "expected": [
+   "Executed by Playwright"
+  ],
+  "assert": {},
+  "events": [],
+  "ops": [],
+  "check": "external",
+  "reason": "Executed by the Playwright suite (frontend/e2e/tests/resilience.spec.ts); see TESTING.md."
+ },
+ {
+  "id": "X02",
+  "title": "API unavailability handled",
+  "group": "frontend",
+  "household": "amina",
+  "kind": "system",
+  "description": "API unavailability handled",
+  "expected": [
+   "Executed by Playwright"
+  ],
+  "assert": {},
+  "events": [],
+  "ops": [],
+  "check": "external",
+  "reason": "Executed by the Playwright suite (frontend/e2e/tests/resilience.spec.ts); see TESTING.md."
+ },
+ {
+  "id": "X03",
+  "title": "Accessibility checks",
+  "group": "frontend",
+  "household": "amina",
+  "kind": "system",
+  "description": "Accessibility checks",
+  "expected": [
+   "Executed by Playwright"
+  ],
+  "assert": {},
+  "events": [],
+  "ops": [],
+  "check": "external",
+  "reason": "Keyboard/landmark/reduced-motion checks run in frontend/e2e/tests/resilience.spec.ts; no full WCAG audit has been performed."
+ },
+ {
+  "id": "X04",
+  "title": "GitHub Pages base path",
+  "group": "frontend",
+  "household": "amina",
+  "kind": "system",
+  "description": "GitHub Pages base path",
+  "expected": [
+   "Checked by the production build"
+  ],
+  "assert": {},
+  "events": [],
+  "ops": [],
+  "check": "external",
+  "reason": "Checked by building with VITE_BASE_PATH=/DOMINO/ and loading the preview; see TESTING.md."
+ }
+]
