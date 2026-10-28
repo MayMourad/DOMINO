@@ -95,11 +95,12 @@ test('Network: add and remove a member, resource and task keeps the household va
   await expect(page.getByRole('heading', { name: 'New member' })).toBeVisible()
   await page.getByRole('button', { name: 'Remove selected' }).click()
   await page.getByRole('dialog').getByRole('button', { name: 'Remove', exact: true }).click()
+  await expect(page.getByText('0 errors · 0 warnings')).toBeVisible({ timeout: 30000 })   // re-validated by the backend
   await page.getByRole('button', { name: 'Add resource' }).click()
   await expect(page.getByRole('heading', { name: 'New resource' })).toBeVisible()
   await page.getByRole('button', { name: 'Remove selected' }).click()
   await page.getByRole('dialog').getByRole('button', { name: 'Remove', exact: true }).click()
-  await expect(page.getByText('0 errors · 0 warnings')).toBeVisible()
+  await expect(page.getByText('0 errors · 0 warnings')).toBeVisible({ timeout: 30000 })
   await page.getByRole('button', { name: /Undo/ }).click()
   await expect(page.getByRole('heading', { name: 'New resource' })).toHaveCount(0)
 })

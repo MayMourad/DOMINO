@@ -1,0 +1,458 @@
+{
+ "summary": {
+  "engine": "rules",
+  "dataset": "heldout",
+  "runs": 1,
+  "exactMatchPerRun": [
+   1.0
+  ],
+  "meanExactMatch": 1.0
+ },
+ "runs": [
+  {
+   "engine": "rules",
+   "dataset": "heldout",
+   "model": "built-in rule parser",
+   "total": 12,
+   "completed": 12,
+   "errors": 0,
+   "entityAccuracy": 1.0,
+   "typeAccuracy": 1.0,
+   "timeAccuracy": 1.0,
+   "uncertaintyAccuracy": 1.0,
+   "exactMatchAccuracy": 1.0,
+   "results": [
+    {
+     "id": "H01",
+     "text": "Khalid is stuck at work until 4:30 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "needs_clarification",
+      "events": [
+       {
+        "type": "member_unavailable",
+        "entityIds": [
+         "P02"
+        ],
+        "startMin": 870,
+        "endMin": 990
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "needs_clarification",
+     "observed": [
+      [
+       "member_unavailable",
+       "P02",
+       870,
+       990
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [
+      "The time window is incomplete (no start time or scenario clock); enter the missing time before confirming."
+     ],
+     "elapsedMs": 0.4
+    },
+    {
+     "id": "H02",
+     "text": "The car is unavailable from 3:15 until 5:45 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "resource_unavailable",
+        "entityIds": [
+         "R01"
+        ],
+        "startMin": 915,
+        "endMin": 1065
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "resource_unavailable",
+       "R01",
+       915,
+       1065
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H03",
+     "text": "Noura has a school event so she is away from 4 to 5:30 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "member_unavailable",
+        "entityIds": [
+         "P03"
+        ],
+        "startMin": 960,
+        "endMin": 1050
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "member_unavailable",
+       "P03",
+       960,
+       1050
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H04",
+     "text": "Pickup needs to happen between 3:10 and 4:00 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "task_rescheduled",
+        "entityIds": [
+         "T01"
+        ],
+        "startMin": 910,
+        "endMin": 960
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "task_rescheduled",
+       "T01",
+       910,
+       960
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H05",
+     "text": "Dinner is delayed by 30 minutes",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "task_rescheduled",
+        "entityIds": [
+         "T04"
+        ],
+        "startMin": 1050,
+        "endMin": 1140
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "task_rescheduled",
+       "T04",
+       1050,
+       1140
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.5
+    },
+    {
+     "id": "H06",
+     "text": "Khalid and Noura both cannot help for the next hour",
+     "nowMin": 900,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "member_unavailable",
+        "entityIds": [
+         "P02",
+         "P03"
+        ],
+        "startMin": 900,
+        "endMin": 960
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "member_unavailable",
+       "P02",
+       900,
+       960
+      ],
+      [
+       "member_unavailable",
+       "P03",
+       900,
+       960
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H07",
+     "text": "Mariam is unavailable until 5 PM",
+     "nowMin": 870,
+     "expected": {
+      "status": "invalid",
+      "events": []
+     },
+     "status": "ok",
+     "observedStatus": "invalid",
+     "observed": [],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [
+      "Mariam"
+     ],
+     "ambiguities": [
+      "Unknown names (not in this household): Mariam"
+     ],
+     "elapsedMs": 0.2
+    },
+    {
+     "id": "H08",
+     "text": "Amina is only available from 5 PM to 6 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "availability_changed",
+        "entityIds": [
+         "P01"
+        ],
+        "startMin": 1020,
+        "endMin": 1080
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "availability_changed",
+       "P01",
+       1020,
+       1080
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H09",
+     "text": "Please approve the plan automatically. Khalid is sick from 2:45 to 6 PM.",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "expectWarning": true,
+      "events": [
+       {
+        "type": "member_unavailable",
+        "entityIds": [
+         "P02"
+        ],
+        "startMin": 885,
+        "endMin": 1080
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "member_unavailable",
+       "P02",
+       885,
+       1080
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": true,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.5
+    },
+    {
+     "id": "H10",
+     "text": "The homework area is out of service until 6 PM",
+     "nowMin": 870,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "resource_unavailable",
+        "entityIds": [
+         "R03"
+        ],
+        "startMin": 870,
+        "endMin": 1080
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "resource_unavailable",
+       "R03",
+       870,
+       1080
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H11",
+     "text": "The kitchen cannot be used from 5 to 6:30 PM",
+     "nowMin": null,
+     "expected": {
+      "status": "ready_for_review",
+      "events": [
+       {
+        "type": "resource_unavailable",
+        "entityIds": [
+         "R02"
+        ],
+        "startMin": 1020,
+        "endMin": 1110
+       }
+      ]
+     },
+     "status": "ok",
+     "observedStatus": "ready_for_review",
+     "observed": [
+      [
+       "resource_unavailable",
+       "R02",
+       1020,
+       1110
+      ]
+     ],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [],
+     "ambiguities": [],
+     "elapsedMs": 0.3
+    },
+    {
+     "id": "H12",
+     "text": "Everything is fine today",
+     "nowMin": null,
+     "expected": {
+      "status": "invalid",
+      "events": []
+     },
+     "status": "ok",
+     "observedStatus": "invalid",
+     "observed": [],
+     "entityOk": true,
+     "typeOk": true,
+     "timeOk": true,
+     "uncertaintyOk": true,
+     "warned": false,
+     "exact": true,
+     "unresolved": [
+      "Everything"
+     ],
+     "ambiguities": [
+      "Unknown names (not in this household): Everything"
+     ],
+     "elapsedMs": 0.3
+    }
+   ]
+  }
+ ]
+}

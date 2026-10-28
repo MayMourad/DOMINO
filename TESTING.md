@@ -6,21 +6,28 @@ All results below are from runs performed during development on Windows 11, Pyth
 
 | Command | Result |
 |---|---|
-| `cd backend && python -m pytest` | **54 passed** (unit, integration, full benchmark suite) |
+| `cd backend && python -m pytest` | **63 passed** (unit, integration, full 51-case benchmark suite) |
 | `cd backend && ruff check .` | All checks passed |
 | `python backend/scripts/build_fixtures.py` | 3 fixtures written; each validated and baseline verified |
 | `python backend/scripts/build_benchmarks.py` | 50 case declarations written |
 | `cd frontend && npm run typecheck` (`tsc --noEmit`) | 0 errors |
 | `cd frontend && npm run lint` | 0 errors, 0 warnings |
-| `cd frontend && npm test` (vitest) | **9 passed** |
-| `cd frontend && DOMINO_PYTHON=<python> npx playwright test` | **6 passed** (flagship flow, multigenerational, restricted transport + approval, refresh, offline, keyboard/reduced-motion) |
+| `cd frontend && npm test` (vitest) | **11 passed** |
+| `cd frontend && DOMINO_PYTHON=<python> npx playwright test` | **15 passed** locally with no AI key (flagship, other two households + approval, refresh, offline, keyboard/reduced-motion, natural-language with the built-in parser, Configure Household, manual events, pin / alternative arrangements, Futures + Apply, Evaluation Lab, household add/remove, plan export) |
 | `cd frontend && VITE_BASE_PATH=/DOMINO/ npx vite build` | Built; assets reference `/DOMINO/` |
 
 Additional runs after the first report (all real, 2026-10-27):
 - **GitHub Actions CI (Ubuntu):** backend (ruff + pytest), frontend (typecheck, lint, vitest, `/DOMINO/` build) and Playwright e2e — **succeeded**.
 - **Live smoke test** (`python scripts/live_smoke.py <api> --origin <pages>`) against a local backend, the Vite proxy, a clean-venv install, and the **hosted Render API**: health, CORS allow/deny, fixtures, flagship simulation + recovery (OPTIMAL, verified), secondary disruption (pickup honestly uncovered), stale-hash and unconfirmed-event refusals, determinism over 3 calls, other two households, live Gemini interpretation, 50-case suite (hosted: 45 pass / 0 fail / 5 not run — E04 is not run once a key is configured), AI accuracy run — **all passed**.
-- **Playwright against the deployed site + hosted API** (`E2E_BASE_URL=https://maymourad.github.io/DOMINO/ npx playwright test`): **7 passed**, including natural language → editable proposal → human confirmation → scenario run. Local run: 6 passed (the AI test is skipped without a key).
-- **Gemini interpretation accuracy** (`scripts/ai_eval_runs.py`, `docs/benchmark-results/ai-interpretation.json`): model `gemini-3.5-flash-lite`, 12 annotated sentences, 3 runs → exact match 100 % / 100 % / 100 % (entity, type, time, uncertainty each 100 %). An earlier run with the first prompt scored 83 % and 92 % — the misses were `availability_changed` chosen for “cannot help”; the prompt now defines each type and the UI warns that `availability_changed` *replaces* availability. 12 sentences is a small set and Gemini is not fully deterministic, so treat this as a sanity check, not a general accuracy claim.
+- **Playwright against the deployed site + hosted API** (`E2E_BASE_URL=https://maymourad.github.io/DOMINO/ npx playwright test`): 15 tests, 14 passed on the first full run; the one failure (household add/remove) passed 5/5 on repeat and was made to wait for backend validation (a transient free-tier hiccup, not a logic bug).
+- **Natural-language interpretation** (`scripts/ai_eval_runs.py`, results in `docs/benchmark-results/ai-*.json`; hosted API, 2026-10-28). Two sentence sets of 12: *annotated* (used while developing) and *held-out* (written afterwards):
+
+  | Engine | Annotated | Held-out |
+  |---|---|---|
+  | Built-in rule parser (deterministic, no key) | 12/12 | 12/12 |
+  | Gemini `gemini-3.5-flash-lite` | 12/12 | 11/12 |
+
+  Caveats, stated plainly: the rule parser scored 11/12 on the held-out set *on its first run*; the two misses were then fixed, so its 12/12 is no longer an independent measurement. Gemini's held-out miss is “Dinner is delayed by 30 minutes”, which needs the task's baseline time (only the rule parser has the household context in code). Earlier Gemini runs on the annotated set varied (83 %, 92 %, then 100 % ×3) before the prompt was tightened, and one run hit Gemini's free-tier rate limit mid-way — the evaluation now paces calls and retries, and auto mode falls back to the rule parser on any Gemini failure. 12 sentences per set is a small sample; treat these as sanity checks, not general accuracy claims.
 - **Bugs found only by live testing and fixed:** `GEMINI_MODEL` set to a project id (now detected and ignored with a health warning); provider errors misclassified as rate limits (“generateContent” contains “rate”); provider call timeout too short for the first model; navigation race when a hosted household load finished after the user moved on; scenario clock displayed but not sent.
 - **Secret scan** of the deployed JS bundle: no `AIza…` key; the API URL is the only backend reference.
 
