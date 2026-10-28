@@ -48,7 +48,7 @@ Recovery solves: n = 27, median ≈ 189 ms, p95 ≈ 333 ms per case (each case r
 Dependency detection (11 cases with hand-written expected sets): precision 1.00, recall 1.00, F1 1.00 — a small, hand-authored set, so not evidence of generality.
 Baselines over 21 disruption cases (all baseline outputs also independently verified valid): mean weighted coverage DOMINO 71.5 %, Greedy first-fit 71.1 %, No recovery 36.6 %. Cases with an uncovered critical task: DOMINO 10, Greedy 10, No recovery 20. **DOMINO did not leave fewer critical tasks uncovered than greedy in any of these cases (ties in all)**; its advantage here is fewer changed assignments (2.48 vs 3.14 mean) and lexicographic guarantees, not more coverage on these small households.
 
-The AI-interpretation accuracy tab is **not executed** without `GEMINI_API_KEY`; no number exists.
+The AI-interpretation accuracy tab needs `GEMINI_API_KEY`, so it was not part of this local run; the results with a real key are in the AI-interpretation list above (Gemini 12/12 annotated, 11/12 held-out; rule parser 12/12 on both) and are small sanity checks, not general accuracy claims. On the hosted API (28 Oct 2026) the full suite reported 51 cases: 46 pass, 0 fail, 5 not run.
 
 ## Known issues / limitations
 

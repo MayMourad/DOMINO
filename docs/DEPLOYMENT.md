@@ -6,7 +6,7 @@
 - **Backend:** https://domino-api-0fo2.onrender.com — Render free web service built from the root `Dockerfile` via `render.yaml` (auto-deploys on push to `main`). `CORS_ALLOWED_ORIGINS=https://maymourad.github.io`. Secrets (`GEMINI_API_KEY`) live only in the Render dashboard.
 - **Cold starts:** the free tier sleeps when idle; the first request can take tens of seconds. Open `/v1/health` before a demo to warm it.
 - **Re-verify any time:** `python scripts/live_smoke.py https://domino-api-0fo2.onrender.com --origin https://maymourad.github.io` and `E2E_BASE_URL=https://maymourad.github.io/DOMINO/ npx playwright test` (from `frontend/`).
-- **Owner action (optional):** in Render, set `GEMINI_MODEL` to `gemini-3.5-flash-lite` (it currently holds a project id, which the backend ignores with a warning).
+- **Model setting:** `GEMINI_MODEL=gemini-3.5-flash-lite` is pinned in `render.yaml`; a non-model value would be ignored with a warning in `/v1/health`.
 
 ## Details
 
