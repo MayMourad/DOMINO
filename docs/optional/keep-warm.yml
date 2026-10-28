@@ -1,0 +1,29 @@
+name: Keep API warm
+# Render's free tier sleeps after ~15 min idle (cold start of tens of seconds). This pings the API every 10 minutes
+# so the competition demo never starts cold. It stops itself after 31 Oct 2026 (UTC); delete this file any time.
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping /v1/health (and one real solve every run)
+        env:
+          API: ${{ vars.API_BASE_URL }}
+        run: |
+          if [ "$(date -u +%Y%m%d)" -gt 20261031 ]; then echo "Window over; nothing to do."; exit 0; fi
+          if [ -z "$API" ]; then echo "API_BASE_URL variable not set"; exit 1; fi
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /tmp/health.json -w '%{http_code}' --max-time 60 "$API/v1/health" || true)
+            echo "attempt $i -> HTTP $code"
+            if [ "$code" = "200" ]; then cat /tmp/health.json; echo; exit 0; fi
+            sleep 20
+          done
+          echo "API did not become healthy"; exit 1
