@@ -130,7 +130,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); padding: 6px 8px; border-bottom: 1px solid var(--line); }
 table.tbl td { padding: 8px; border-bottom: 1px solid #edf0f4; vertical-align: top; }
 
-dialog.modal { border: 0; border-radius: 16px; padding: 0; width: min(920px, 94vw); max-height: 90vh; box-shadow: 0 30px 80px -20px rgba(8, 24, 46, 0.5); color: var(--ink); }
+dialog.modal { margin: auto; border: 0; border-radius: 16px; padding: 0; width: min(920px, 94vw); max-height: 90vh; box-shadow: 0 30px 80px -20px rgba(8, 24, 46, 0.5); color: var(--ink); }
 dialog.modal::backdrop { background: rgba(8, 24, 46, 0.55); backdrop-filter: blur(2px); }
 .toasts { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 100; max-width: min(420px, 92vw); }
 .toast { padding: 10px 14px; border-radius: 12px; color: #fff; background: var(--navy); box-shadow: var(--shadow); display: flex; gap: 10px; font-size: 13px; }
