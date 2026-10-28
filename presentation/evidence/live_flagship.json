@@ -1,0 +1,3330 @@
+{
+ "observed_at": "2026-10-28T09:51:44.215932Z",
+ "health": {
+  "status": "ok",
+  "engineVersion": "domino-engine/1.0.0",
+  "solver": "OR-Tools CP-SAT",
+  "interpreter": {
+   "rules": true,
+   "gemini": true
+  },
+  "ai": {
+   "available": true,
+   "model": "gemini-3.5-flash-lite",
+   "warning": null
+  },
+  "benchmarksEnabled": true,
+  "time": "2026-10-28T09:51:44+00:00"
+ },
+ "fixtures": {
+  "amina": {
+   "id": "amina",
+   "name": "The Amina Family",
+   "description": "Flagship fictional household: two authorized adult drivers, a teen who may help with homework, and a 9-year-old who depends on school pickup.",
+   "simulationDate": "2026-10-29",
+   "timezone": "Asia/Dubai",
+   "version": 1,
+   "planningStartMin": 870,
+   "planningEndMin": 1140,
+   "gridMin": 5,
+   "locations": [
+    {
+     "id": "L01",
+     "name": "Home"
+    },
+    {
+     "id": "L02",
+     "name": "School"
+    },
+    {
+     "id": "L03",
+     "name": "Grocery store"
+    }
+   ],
+   "travelMatrix": [
+    {
+     "fromId": "L01",
+     "toId": "L02",
+     "minutes": 20
+    },
+    {
+     "fromId": "L02",
+     "toId": "L01",
+     "minutes": 20
+    },
+    {
+     "fromId": "L01",
+     "toId": "L03",
+     "minutes": 12
+    },
+    {
+     "fromId": "L03",
+     "toId": "L01",
+     "minutes": 12
+    },
+    {
+     "fromId": "L02",
+     "toId": "L03",
+     "minutes": 15
+    },
+    {
+     "fromId": "L03",
+     "toId": "L02",
+     "minutes": 15
+    }
+   ],
+   "members": [
+    {
+     "id": "P01",
+     "name": "Amina",
+     "age": 41,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "shopping",
+      "homework_assist"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1110
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 20
+    },
+    {
+     "id": "P02",
+     "name": "Khalid",
+     "age": 43,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "shopping",
+      "meal_prep"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1110
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 30
+    },
+    {
+     "id": "P03",
+     "name": "Noura",
+     "age": 16,
+     "role": "teen",
+     "isDependent": false,
+     "skills": [
+      "homework_assist"
+     ],
+     "permissions": [],
+     "restrictions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "availability": [
+      {
+       "startMin": 990,
+       "endMin": 1080
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 45
+    },
+    {
+     "id": "P04",
+     "name": "Yusuf",
+     "age": 9,
+     "role": "child",
+     "isDependent": true,
+     "skills": [],
+     "permissions": [],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [],
+     "baselineWorkloadMinutes": 0
+    }
+   ],
+   "tasks": [
+    {
+     "id": "T01",
+     "title": "School pickup",
+     "description": "Depart home, collect Yusuf from school (~15:00), return home.",
+     "tier": 0,
+     "priorityWeight": 10,
+     "durationMin": 40,
+     "earliestStartMin": 880,
+     "latestEndMin": 945,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "driving"
+     ],
+     "requiredPermissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle",
+      "child_restraint"
+     ],
+     "resourceUnits": {
+      "vehicle": 2
+     },
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": true,
+     "isOptional": false
+    },
+    {
+     "id": "T02",
+     "title": "Grocery collection",
+     "description": "Round trip to collect groceries.",
+     "tier": 3,
+     "priorityWeight": 2,
+     "durationMin": 35,
+     "earliestStartMin": 900,
+     "latestEndMin": 1050,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "shopping"
+     ],
+     "requiredPermissions": [
+      "drive"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T03",
+     "title": "Homework assistance",
+     "description": "Help Yusuf with homework once he is home.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 30,
+     "earliestStartMin": 990,
+     "latestEndMin": 1080,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "homework_assist"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "study_area"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [
+      "M01"
+     ],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T04",
+     "title": "Dinner preparation",
+     "description": "Prepare the family dinner.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 30,
+     "earliestStartMin": 1020,
+     "latestEndMin": 1110,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "meal_prep"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "kitchen"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    }
+   ],
+   "resources": [
+    {
+     "id": "R01",
+     "name": "Family sedan",
+     "type": "vehicle",
+     "capacity": 5,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R02",
+     "name": "Home kitchen",
+     "type": "kitchen",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R03",
+     "name": "Homework area",
+     "type": "study_area",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R04",
+     "name": "Child vehicle restraint",
+     "type": "child_restraint",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    }
+   ],
+   "milestones": [
+    {
+     "id": "M01",
+     "title": "Yusuf arrived home",
+     "enabledByTaskIds": [
+      "T01"
+     ],
+     "dependentId": "P04"
+    }
+   ],
+   "baselineAssignments": [
+    {
+     "taskId": "T01",
+     "memberId": "P01",
+     "startMin": 885,
+     "endMin": 925,
+     "resourceIds": [
+      "R01",
+      "R04"
+     ],
+     "itineraryId": "itin-school-pickup",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T02",
+     "memberId": "P01",
+     "startMin": 955,
+     "endMin": 990,
+     "resourceIds": [
+      "R01"
+     ],
+     "itineraryId": "itin-grocery",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T03",
+     "memberId": "P01",
+     "startMin": 1005,
+     "endMin": 1035,
+     "resourceIds": [
+      "R03"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T04",
+     "memberId": "P02",
+     "startMin": 1050,
+     "endMin": 1080,
+     "resourceIds": [
+      "R02"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    }
+   ]
+  },
+  "multigenerational": {
+   "id": "multigenerational",
+   "name": "The Al-Mansoori Multigenerational Family",
+   "description": "Fictional three-generation household: two working adults, an independent grandmother with limited availability and no driving licence, and a 12-year-old student.",
+   "simulationDate": "2026-10-29",
+   "timezone": "Asia/Dubai",
+   "version": 1,
+   "planningStartMin": 870,
+   "planningEndMin": 1140,
+   "gridMin": 5,
+   "locations": [
+    {
+     "id": "L01",
+     "name": "Home"
+    },
+    {
+     "id": "L02",
+     "name": "School"
+    },
+    {
+     "id": "L03",
+     "name": "Grocery store"
+    }
+   ],
+   "travelMatrix": [
+    {
+     "fromId": "L01",
+     "toId": "L02",
+     "minutes": 20
+    },
+    {
+     "fromId": "L02",
+     "toId": "L01",
+     "minutes": 20
+    },
+    {
+     "fromId": "L01",
+     "toId": "L03",
+     "minutes": 12
+    },
+    {
+     "fromId": "L03",
+     "toId": "L01",
+     "minutes": 12
+    },
+    {
+     "fromId": "L02",
+     "toId": "L03",
+     "minutes": 15
+    },
+    {
+     "fromId": "L03",
+     "toId": "L02",
+     "minutes": 15
+    }
+   ],
+   "members": [
+    {
+     "id": "P01",
+     "name": "Mariam",
+     "age": 39,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "meal_prep",
+      "household_checkin",
+      "shopping"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 885,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 25
+    },
+    {
+     "id": "P02",
+     "name": "Omar",
+     "age": 42,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "shopping",
+      "meal_prep"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 885,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 25
+    },
+    {
+     "id": "P03",
+     "name": "Fatima",
+     "age": 70,
+     "role": "senior",
+     "isDependent": false,
+     "skills": [
+      "homework_assist",
+      "household_checkin"
+     ],
+     "permissions": [],
+     "restrictions": [
+      "drive"
+     ],
+     "availability": [
+      {
+       "startMin": 930,
+       "endMin": 1050
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 0
+    },
+    {
+     "id": "P04",
+     "name": "Hessa",
+     "age": 12,
+     "role": "child",
+     "isDependent": true,
+     "skills": [],
+     "permissions": [],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [],
+     "baselineWorkloadMinutes": 0
+    }
+   ],
+   "tasks": [
+    {
+     "id": "T01",
+     "title": "Hessa school pickup",
+     "description": "Collect Hessa from school and return home.",
+     "tier": 0,
+     "priorityWeight": 10,
+     "durationMin": 40,
+     "earliestStartMin": 890,
+     "latestEndMin": 950,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "driving"
+     ],
+     "requiredPermissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle"
+     ],
+     "resourceUnits": {
+      "vehicle": 2
+     },
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": true,
+     "isOptional": false
+    },
+    {
+     "id": "T02",
+     "title": "Afternoon household check-in",
+     "description": "Brief check-in on the household.",
+     "tier": 2,
+     "priorityWeight": 3,
+     "durationMin": 20,
+     "earliestStartMin": 945,
+     "latestEndMin": 1020,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "household_checkin"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T03",
+     "title": "Schoolwork assistance",
+     "description": "Support Hessa's schoolwork at home.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 30,
+     "earliestStartMin": 975,
+     "latestEndMin": 1065,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "homework_assist"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "study_area"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [
+      "M01"
+     ],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T04",
+     "title": "Grocery collection",
+     "description": "Round trip errand.",
+     "tier": 3,
+     "priorityWeight": 2,
+     "durationMin": 40,
+     "earliestStartMin": 1000,
+     "latestEndMin": 1100,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "shopping"
+     ],
+     "requiredPermissions": [
+      "drive"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T05",
+     "title": "Dinner preparation",
+     "description": "Prepare dinner for four.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 40,
+     "earliestStartMin": 1050,
+     "latestEndMin": 1140,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "meal_prep"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "kitchen"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    }
+   ],
+   "resources": [
+    {
+     "id": "R01",
+     "name": "Family sedan",
+     "type": "vehicle",
+     "capacity": 5,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 885,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R02",
+     "name": "Shared kitchen",
+     "type": "kitchen",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R03",
+     "name": "Study area",
+     "type": "study_area",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    }
+   ],
+   "milestones": [
+    {
+     "id": "M01",
+     "title": "Hessa arrived home",
+     "enabledByTaskIds": [
+      "T01"
+     ],
+     "dependentId": "P04"
+    }
+   ],
+   "baselineAssignments": [
+    {
+     "taskId": "T01",
+     "memberId": "P02",
+     "startMin": 900,
+     "endMin": 940,
+     "resourceIds": [
+      "R01"
+     ],
+     "itineraryId": "itin-school-pickup",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T02",
+     "memberId": "P01",
+     "startMin": 960,
+     "endMin": 980,
+     "resourceIds": [],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T03",
+     "memberId": "P03",
+     "startMin": 990,
+     "endMin": 1020,
+     "resourceIds": [
+      "R03"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T04",
+     "memberId": "P02",
+     "startMin": 1020,
+     "endMin": 1060,
+     "resourceIds": [
+      "R01"
+     ],
+     "itineraryId": "itin-grocery",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T05",
+     "memberId": "P01",
+     "startMin": 1080,
+     "endMin": 1120,
+     "resourceIds": [
+      "R02"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    }
+   ]
+  },
+  "restricted-transport": {
+   "id": "restricted-transport",
+   "name": "The Salma Family",
+   "description": "Fictional household with a single licensed driver and one vehicle: losing either leaves the school pickup without a legal replacement.",
+   "simulationDate": "2026-10-29",
+   "timezone": "Asia/Dubai",
+   "version": 1,
+   "planningStartMin": 870,
+   "planningEndMin": 1140,
+   "gridMin": 5,
+   "locations": [
+    {
+     "id": "L01",
+     "name": "Home"
+    },
+    {
+     "id": "L02",
+     "name": "School"
+    },
+    {
+     "id": "L03",
+     "name": "Grocery store"
+    }
+   ],
+   "travelMatrix": [
+    {
+     "fromId": "L01",
+     "toId": "L02",
+     "minutes": 20
+    },
+    {
+     "fromId": "L02",
+     "toId": "L01",
+     "minutes": 20
+    },
+    {
+     "fromId": "L01",
+     "toId": "L03",
+     "minutes": 12
+    },
+    {
+     "fromId": "L03",
+     "toId": "L01",
+     "minutes": 12
+    },
+    {
+     "fromId": "L02",
+     "toId": "L03",
+     "minutes": 15
+    },
+    {
+     "fromId": "L03",
+     "toId": "L02",
+     "minutes": 15
+    }
+   ],
+   "members": [
+    {
+     "id": "P01",
+     "name": "Salma",
+     "age": 38,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "driving",
+      "shopping",
+      "meal_prep"
+     ],
+     "permissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 30
+    },
+    {
+     "id": "P02",
+     "name": "Rashid",
+     "age": 40,
+     "role": "adult",
+     "isDependent": false,
+     "skills": [
+      "meal_prep",
+      "homework_assist"
+     ],
+     "permissions": [],
+     "restrictions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 20
+    },
+    {
+     "id": "P03",
+     "name": "Leena",
+     "age": 17,
+     "role": "teen",
+     "isDependent": false,
+     "skills": [
+      "homework_assist"
+     ],
+     "permissions": [],
+     "restrictions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "availability": [
+      {
+       "startMin": 990,
+       "endMin": 1080
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [
+      "P04"
+     ],
+     "baselineWorkloadMinutes": 40
+    },
+    {
+     "id": "P04",
+     "name": "Ali",
+     "age": 9,
+     "role": "child",
+     "isDependent": true,
+     "skills": [],
+     "permissions": [],
+     "restrictions": [],
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "homeLocationId": "L01",
+     "authorizedDependentIds": [],
+     "baselineWorkloadMinutes": 0
+    }
+   ],
+   "tasks": [
+    {
+     "id": "T01",
+     "title": "School pickup",
+     "description": "Collect Ali from school and return home.",
+     "tier": 0,
+     "priorityWeight": 10,
+     "durationMin": 40,
+     "earliestStartMin": 890,
+     "latestEndMin": 950,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "driving"
+     ],
+     "requiredPermissions": [
+      "drive",
+      "pickup_authorized"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle"
+     ],
+     "resourceUnits": {
+      "vehicle": 2
+     },
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": true,
+     "isOptional": false
+    },
+    {
+     "id": "T02",
+     "title": "Grocery collection",
+     "description": "Round trip errand.",
+     "tier": 3,
+     "priorityWeight": 2,
+     "durationMin": 35,
+     "earliestStartMin": 945,
+     "latestEndMin": 1080,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "shopping"
+     ],
+     "requiredPermissions": [
+      "drive"
+     ],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "vehicle"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T03",
+     "title": "Homework support",
+     "description": "Help Ali with homework once he is home.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 30,
+     "earliestStartMin": 990,
+     "latestEndMin": 1080,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "homework_assist"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "study_area"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [
+      "P04"
+     ],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [
+      "M01"
+     ],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    },
+    {
+     "id": "T04",
+     "title": "Dinner preparation",
+     "description": "Prepare the family dinner.",
+     "tier": 1,
+     "priorityWeight": 6,
+     "durationMin": 35,
+     "earliestStartMin": 1050,
+     "latestEndMin": 1140,
+     "fixedStartMin": null,
+     "requiredSkills": [
+      "meal_prep"
+     ],
+     "requiredPermissions": [],
+     "eligibleMemberIds": null,
+     "excludedMemberIds": [],
+     "requiredResourceTypes": [
+      "kitchen"
+     ],
+     "resourceUnits": {},
+     "requiredDependentIds": [],
+     "predecessorTaskIds": [],
+     "requiredMilestoneIds": [],
+     "originLocationId": "L01",
+     "destinationLocationId": "L01",
+     "requiredConsent": false,
+     "isOptional": false
+    }
+   ],
+   "resources": [
+    {
+     "id": "R01",
+     "name": "Family vehicle",
+     "type": "vehicle",
+     "capacity": 5,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R02",
+     "name": "Home study space",
+     "type": "study_area",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    },
+    {
+     "id": "R03",
+     "name": "Kitchen",
+     "type": "kitchen",
+     "capacity": 1,
+     "exclusive": true,
+     "availability": [
+      {
+       "startMin": 870,
+       "endMin": 1140
+      }
+     ],
+     "unavailableWindows": [],
+     "locationId": "L01",
+     "restrictions": [],
+     "allowedMemberIds": null
+    }
+   ],
+   "milestones": [
+    {
+     "id": "M01",
+     "title": "Ali arrived home",
+     "enabledByTaskIds": [
+      "T01"
+     ],
+     "dependentId": "P04"
+    }
+   ],
+   "baselineAssignments": [
+    {
+     "taskId": "T01",
+     "memberId": "P01",
+     "startMin": 900,
+     "endMin": 940,
+     "resourceIds": [
+      "R01"
+     ],
+     "itineraryId": "itin-school-pickup",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T02",
+     "memberId": "P01",
+     "startMin": 960,
+     "endMin": 995,
+     "resourceIds": [
+      "R01"
+     ],
+     "itineraryId": "itin-grocery",
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T03",
+     "memberId": "P03",
+     "startMin": 1020,
+     "endMin": 1050,
+     "resourceIds": [
+      "R02"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    },
+    {
+     "taskId": "T04",
+     "memberId": "P02",
+     "startMin": 1080,
+     "endMin": 1115,
+     "resourceIds": [
+      "R03"
+     ],
+     "itineraryId": null,
+     "changedFromBaseline": false
+    }
+   ]
+  }
+ },
+ "sim_ms_roundtrip": 469,
+ "sim": {
+  "simulationId": "sim-c9c332d115",
+  "householdId": "amina",
+  "householdVersion": 1,
+  "scenarioVersion": 1,
+  "inputHash": "sc-ebfc5d1509012d74",
+  "engineVersion": "domino-engine/1.0.0",
+  "computedAt": "2026-10-28T09:51:46+00:00",
+  "calculationStatus": "ok",
+  "directEntityIds": [
+   "P01",
+   "T01",
+   "T02",
+   "T03"
+  ],
+  "indirectEntityIds": [
+   "M01",
+   "P04"
+  ],
+  "affectedTaskIds": [
+   "T01",
+   "T02",
+   "T03"
+  ],
+  "nodes": [
+   {
+    "id": "e1",
+    "nodeType": "disruption",
+    "label": "Amina unavailable until 18:00",
+    "category": "directly_disrupted",
+    "reasonCodes": [
+     "DISRUPTION_ROOT"
+    ],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Scenario event: Amina unavailable until 18:00.",
+    "recoverable": null
+   },
+   {
+    "id": "P01",
+    "nodeType": "person",
+    "label": "Amina",
+    "category": "directly_disrupted",
+    "reasonCodes": [
+     "MEMBER_UNAVAILABLE"
+    ],
+    "depth": 1,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01"
+      ],
+      "edgeTypes": [
+       "disrupted_by"
+      ]
+     }
+    ],
+    "explanation": "Amina is unavailable 14:30\u201318:00 \u2014 Amina unavailable until 18:00.",
+    "recoverable": null
+   },
+   {
+    "id": "T01",
+    "nodeType": "task",
+    "label": "School pickup",
+    "category": "directly_disrupted",
+    "reasonCodes": [
+     "MEMBER_UNAVAILABLE"
+    ],
+    "depth": 2,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T01"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to"
+      ]
+     }
+    ],
+    "explanation": "School pickup (14:45\u201315:25) is assigned to Amina, who is unavailable 14:30\u201318:00.",
+    "recoverable": true
+   },
+   {
+    "id": "T02",
+    "nodeType": "task",
+    "label": "Grocery collection",
+    "category": "directly_disrupted",
+    "reasonCodes": [
+     "MEMBER_UNAVAILABLE"
+    ],
+    "depth": 2,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T02"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to"
+      ]
+     }
+    ],
+    "explanation": "Grocery collection (15:55\u201316:30) is assigned to Amina, who is unavailable 14:30\u201318:00.",
+    "recoverable": true
+   },
+   {
+    "id": "T03",
+    "nodeType": "task",
+    "label": "Homework assistance",
+    "category": "directly_disrupted",
+    "reasonCodes": [
+     "MEMBER_UNAVAILABLE",
+     "PREREQUISITE_THREATENED"
+    ],
+    "depth": 2,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T03"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to"
+      ]
+     },
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T01",
+       "M01",
+       "T03"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to",
+       "enables",
+       "depends_on"
+      ]
+     }
+    ],
+    "explanation": "Homework assistance (16:45\u201317:15) is assigned to Amina, who is unavailable 14:30\u201318:00.",
+    "recoverable": true
+   },
+   {
+    "id": "P04",
+    "nodeType": "person",
+    "label": "Yusuf",
+    "category": "at_risk_dependency",
+    "reasonCodes": [
+     "DEPENDENT_AT_RISK"
+    ],
+    "depth": 3,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T01",
+       "P04"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to",
+       "serves_dependent"
+      ]
+     },
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T03",
+       "P04"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to",
+       "serves_dependent"
+      ]
+     },
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T01",
+       "M01",
+       "T03",
+       "P04"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to",
+       "enables",
+       "depends_on",
+       "serves_dependent"
+      ]
+     }
+    ],
+    "explanation": "Yusuf depends on School pickup, which is disrupted, so their need is not yet met.",
+    "recoverable": true
+   },
+   {
+    "id": "M01",
+    "nodeType": "milestone",
+    "label": "Yusuf arrived home",
+    "category": "at_risk_dependency",
+    "reasonCodes": [
+     "PREREQUISITE_THREATENED"
+    ],
+    "depth": 3,
+    "causalPaths": [
+     {
+      "nodeIds": [
+       "e1",
+       "P01",
+       "T01",
+       "M01"
+      ],
+      "edgeTypes": [
+       "disrupted_by",
+       "assigned_to",
+       "enables"
+      ]
+     }
+    ],
+    "explanation": "'Yusuf arrived home' is enabled by School pickup; that responsibility is disrupted so the milestone is not satisfied.",
+    "recoverable": true
+   },
+   {
+    "id": "P02",
+    "nodeType": "person",
+    "label": "Khalid",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Khalid is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "P03",
+    "nodeType": "person",
+    "label": "Noura",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Noura is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "R01",
+    "nodeType": "resource",
+    "label": "Family sedan",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Family sedan is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "R02",
+    "nodeType": "resource",
+    "label": "Home kitchen",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Home kitchen is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "R03",
+    "nodeType": "resource",
+    "label": "Homework area",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Homework area is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "R04",
+    "nodeType": "resource",
+    "label": "Child vehicle restraint",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Child vehicle restraint is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   },
+   {
+    "id": "T04",
+    "nodeType": "task",
+    "label": "Dinner preparation",
+    "category": "unaffected",
+    "reasonCodes": [],
+    "depth": 0,
+    "causalPaths": [],
+    "explanation": "Dinner preparation is not connected to any disrupted entity through a valid dependency edge.",
+    "recoverable": null
+   }
+  ],
+  "cascade": [
+   {
+    "depth": 0,
+    "nodeIds": [
+     "e1"
+    ],
+    "edges": []
+   },
+   {
+    "depth": 1,
+    "nodeIds": [
+     "P01"
+    ],
+    "edges": [
+     [
+      "e1",
+      "P01",
+      "disrupted_by"
+     ]
+    ]
+   },
+   {
+    "depth": 2,
+    "nodeIds": [
+     "T01",
+     "T02",
+     "T03"
+    ],
+    "edges": [
+     [
+      "M01",
+      "T03",
+      "depends_on"
+     ],
+     [
+      "P01",
+      "T01",
+      "assigned_to"
+     ],
+     [
+      "P01",
+      "T02",
+      "assigned_to"
+     ],
+     [
+      "P01",
+      "T03",
+      "assigned_to"
+     ]
+    ]
+   },
+   {
+    "depth": 3,
+    "nodeIds": [
+     "M01",
+     "P04"
+    ],
+    "edges": [
+     [
+      "T01",
+      "M01",
+      "enables"
+     ],
+     [
+      "T01",
+      "P04",
+      "serves_dependent"
+     ],
+     [
+      "T03",
+      "P04",
+      "serves_dependent"
+     ]
+    ]
+   }
+  ],
+  "maxDepth": 3,
+  "baselineCoverage": {
+   "coveredByTier": {
+    "0": 1,
+    "1": 2,
+    "2": 0,
+    "3": 1
+   },
+   "totalByTier": {
+    "0": 1,
+    "1": 2,
+    "2": 0,
+    "3": 1
+   },
+   "weightedCoverage": 1.0,
+   "uncoveredTaskIds": []
+  },
+  "postDisruptionCoverage": {
+   "coveredByTier": {
+    "0": 0,
+    "1": 1,
+    "2": 0,
+    "3": 0
+   },
+   "totalByTier": {
+    "0": 1,
+    "1": 2,
+    "2": 0,
+    "3": 1
+   },
+   "weightedCoverage": 0.25,
+   "uncoveredTaskIds": [
+    "T01",
+    "T02",
+    "T03"
+   ]
+  },
+  "recoverabilityProbe": {
+   "solverStatus": "OPTIMAL",
+   "elapsedMs": 105.52,
+   "coveredTaskIds": [
+    "T01",
+    "T02",
+    "T03",
+    "T04"
+   ],
+   "uncoveredTaskIds": [],
+   "criticalRecovery": true,
+   "completeRecovery": true,
+   "note": "Feasibility probe using the Priority First objective; full alternatives come from /v1/recovery-plans."
+  },
+  "warnings": [],
+  "durationMs": 1.57
+ },
+ "rec_ms_roundtrip": 910,
+ "rec": {
+  "requestedInputHash": "in-17089393a167cbed",
+  "simulationHash": "sc-ebfc5d1509012d74",
+  "engineVersion": "domino-engine/1.0.0",
+  "solverStatus": "OPTIMAL",
+  "plans": [
+   {
+    "planId": "plan-9dcf41664c",
+    "strategyId": "priority_first",
+    "strategyIds": [
+     "priority_first",
+     "minimum_change",
+     "balanced_workload"
+    ],
+    "label": "Priority First \u00b7 Minimum Change \u00b7 Balanced Workload",
+    "inputHash": "in-17089393a167cbed",
+    "assignments": [
+     {
+      "taskId": "T01",
+      "memberId": "P02",
+      "startMin": 885,
+      "endMin": 925,
+      "resourceIds": [
+       "R01",
+       "R04"
+      ],
+      "itineraryId": "itin-school-pickup",
+      "changedFromBaseline": true
+     },
+     {
+      "taskId": "T02",
+      "memberId": "P02",
+      "startMin": 955,
+      "endMin": 990,
+      "resourceIds": [
+       "R01"
+      ],
+      "itineraryId": "itin-grocery",
+      "changedFromBaseline": true
+     },
+     {
+      "taskId": "T03",
+      "memberId": "P03",
+      "startMin": 1005,
+      "endMin": 1035,
+      "resourceIds": [
+       "R03"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": true
+     },
+     {
+      "taskId": "T04",
+      "memberId": "P02",
+      "startMin": 1050,
+      "endMin": 1080,
+      "resourceIds": [
+       "R02"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+     }
+    ],
+    "uncoveredTaskIds": [],
+    "uncoveredCriticalTaskIds": [],
+    "uncoveredOtherTaskIds": [],
+    "completeRecovery": true,
+    "criticalRecovery": true,
+    "pendingConsentTaskIds": [
+     "T01"
+    ],
+    "solverStatus": "OPTIMAL",
+    "solverElapsedMs": 51.26,
+    "objectives": [
+     {
+      "name": "tier0_weighted_coverage",
+      "value": 10.0
+     },
+     {
+      "name": "tier1_weighted_coverage",
+      "value": 12.0
+     },
+     {
+      "name": "tier3_weighted_coverage",
+      "value": 2.0
+     },
+     {
+      "name": "total_displacement_minutes",
+      "value": 0.0
+     },
+     {
+      "name": "changed_assignments",
+      "value": 3.0
+     }
+    ],
+    "metrics": {
+     "coveredByTier": {
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 1
+     },
+     "totalByTier": {
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 1
+     },
+     "weightedCoverage": 1.0,
+     "coveredCount": 4,
+     "totalCount": 4,
+     "reassignmentCount": 3,
+     "displacementMin": 0,
+     "workloadMinutes": {
+      "P01": 20,
+      "P02": 135,
+      "P03": 75
+     },
+     "workloadGini": 0.3333,
+     "maxWorkloadMin": 135
+    },
+    "changedTaskIds": [
+     "T01",
+     "T02",
+     "T03"
+    ],
+    "explanations": [
+     {
+      "id": "exp-T01",
+      "kind": "assignment_accepted",
+      "taskId": "T01",
+      "memberId": "P02",
+      "codes": [
+       "REASSIGNED"
+      ],
+      "text": "Khalid is eligible for School pickup because they hold permissions [drive, pickup_authorized] and skills [driving], are specifically authorized for Yusuf, and Family sedan, Child vehicle restraint are available 14:45\u201315:25.",
+      "evidence": {
+       "permissions": [
+        "drive",
+        "pickup_authorized"
+       ],
+       "skills": [
+        "driving"
+       ],
+       "resources": [
+        "R01",
+        "R04"
+       ],
+       "interval": [
+        885,
+        925
+       ],
+       "baselineMember": "P01"
+      }
+     },
+     {
+      "id": "exp-T02",
+      "kind": "assignment_accepted",
+      "taskId": "T02",
+      "memberId": "P02",
+      "codes": [
+       "REASSIGNED"
+      ],
+      "text": "Khalid is eligible for Grocery collection because they hold permissions [drive] and skills [shopping], and Family sedan is available 15:55\u201316:30.",
+      "evidence": {
+       "permissions": [
+        "drive"
+       ],
+       "skills": [
+        "shopping"
+       ],
+       "resources": [
+        "R01"
+       ],
+       "interval": [
+        955,
+        990
+       ],
+       "baselineMember": "P01"
+      }
+     },
+     {
+      "id": "exp-T03",
+      "kind": "assignment_accepted",
+      "taskId": "T03",
+      "memberId": "P03",
+      "codes": [
+       "REASSIGNED"
+      ],
+      "text": "Noura is eligible for Homework assistance because they hold permissions [none required] and skills [homework_assist], are specifically authorized for Yusuf, and Homework area is available 16:45\u201317:15.",
+      "evidence": {
+       "permissions": [],
+       "skills": [
+        "homework_assist"
+       ],
+       "resources": [
+        "R03"
+       ],
+       "interval": [
+        1005,
+        1035
+       ],
+       "baselineMember": "P01"
+      }
+     },
+     {
+      "id": "exp-T04",
+      "kind": "assignment_unchanged",
+      "taskId": "T04",
+      "memberId": "P02",
+      "codes": [
+       "UNCHANGED_FROM_BASELINE"
+      ],
+      "text": "Unchanged from baseline. Khalid is eligible for Dinner preparation because they hold permissions [none required] and skills [meal_prep], and Home kitchen is available 17:30\u201318:00.",
+      "evidence": {
+       "permissions": [],
+       "skills": [
+        "meal_prep"
+       ],
+       "resources": [
+        "R02"
+       ],
+       "interval": [
+        1050,
+        1080
+       ],
+       "baselineMember": "P02"
+      }
+     }
+    ],
+    "rejectedAlternatives": {
+     "T01": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 40-minute slot within 14:40\u201315:45"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL",
+        "MISSING_PERMISSION",
+        "MISSING_PERMISSION",
+        "RESTRICTED",
+        "RESTRICTED"
+       ],
+       "text": "Noura: Noura lacks the skill 'driving'; Noura lacks the permission 'drive'; Noura lacks the permission 'pickup_authorized'; Noura has the restriction 'drive'; Noura has the restriction 'pickup_authorized'"
+      }
+     ],
+     "T02": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 35-minute slot within 15:00\u201317:30"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL",
+        "MISSING_PERMISSION",
+        "RESTRICTED"
+       ],
+       "text": "Noura: Noura lacks the skill 'shopping'; Noura lacks the permission 'drive'; Noura has the restriction 'drive'"
+      }
+     ],
+     "T03": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 30-minute slot within 16:30\u201318:00"
+      },
+      {
+       "memberId": "P02",
+       "memberName": "Khalid",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Khalid: Khalid lacks the skill 'homework_assist'"
+      }
+     ],
+     "T04": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Amina: Amina lacks the skill 'meal_prep'"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Noura: Noura lacks the skill 'meal_prep'"
+      }
+     ]
+    },
+    "validation": {
+     "planId": "plan-9dcf41664c",
+     "inputHash": "in-17089393a167cbed",
+     "expectedHash": "in-17089393a167cbed",
+     "overallStatus": "valid",
+     "completeness": "complete",
+     "hardViolations": 0,
+     "uncoveredCriticalTaskIds": [],
+     "checks": [
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T01"
+       ],
+       "passed": true,
+       "evidence": "T01 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "T02 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T03"
+       ],
+       "passed": true,
+       "evidence": "T03 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "T04 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds skills ['driving']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds permissions ['drive', 'pickup_authorized']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid is eligible for School pickup",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "14:45\u201315:25 fits 14:40\u201315:45",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid available over 14:45\u201315:25",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resources ['R01', 'R04'] available over 14:45\u201315:25",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resource types ['vehicle', 'child_restraint'] satisfied by ['R01', 'R04']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T01",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid authorized for ['P04']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds skills ['shopping']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds permissions ['drive']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid is eligible for Grocery collection",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "15:55\u201316:30 fits 15:00\u201317:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid available over 15:55\u201316:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resources ['R01'] available over 15:55\u201316:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resource types ['vehicle'] satisfied by ['R01']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid authorized for no dependents required",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "Noura holds skills ['homework_assist']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "Noura holds permissions [none required]",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "Noura is eligible for Homework assistance",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "16:45\u201317:15 fits 16:30\u201318:00",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "Noura available over 16:45\u201317:15",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "resources ['R03'] available over 16:45\u201317:15",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "resource types ['study_area'] satisfied by ['R03']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T03",
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "Noura authorized for ['P04']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds skills ['meal_prep']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds permissions [none required]",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid is eligible for Dinner preparation",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "17:30\u201318:00 fits 17:00\u201318:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid available over 17:30\u201318:00",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resources ['R02'] available over 17:30\u201318:00",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resource types ['kitchen'] satisfied by ['R02']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid authorized for no dependents required",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V08",
+       "description": "A member never performs overlapping assignments (including required travel gaps)",
+       "affectedEntityIds": [
+        "P02",
+        "T01",
+        "T02",
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "3 assignment(s) for P02 do not overlap",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V14",
+       "description": "Itinerary and travel assumptions are respected",
+       "affectedEntityIds": [
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "itinerary durations include transit; transitions respected",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V08",
+       "description": "A member never performs overlapping assignments (including required travel gaps)",
+       "affectedEntityIds": [
+        "P03",
+        "T03"
+       ],
+       "passed": true,
+       "evidence": "1 assignment(s) for P03 do not overlap",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V14",
+       "description": "Itinerary and travel assumptions are respected",
+       "affectedEntityIds": [
+        "P03"
+       ],
+       "passed": true,
+       "evidence": "itinerary durations include transit; transitions respected",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R01",
+        "T01",
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "Family sedan: 2 booking(s) within capacity 5 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R04",
+        "T01"
+       ],
+       "passed": true,
+       "evidence": "Child vehicle restraint: 1 booking(s) within capacity 1 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R03",
+        "T03"
+       ],
+       "passed": true,
+       "evidence": "Homework area: 1 booking(s) within capacity 1 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R02",
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "Home kitchen: 1 booking(s) within capacity 1 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T01"
+       ],
+       "passed": true,
+       "evidence": "no prerequisites",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "no prerequisites",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T03",
+        "T01"
+       ],
+       "passed": true,
+       "evidence": "prerequisites ['T01'] complete before 16:45",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "no prerequisites",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V15",
+       "description": "Plan corresponds to the current scenario hash",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "plan hash in-17089393a167cbed matches in-17089393a167cbed",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V16",
+       "description": "Coverage of critical tasks is reported accurately",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "uncovered set [] reported exactly",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V17",
+       "description": "Consent-dependent actions remain pending approval",
+       "affectedEntityIds": [
+        "T01"
+       ],
+       "passed": true,
+       "evidence": "consent pending for ['T01'] until each assignee confirms; DOMINO sends no notifications",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V18",
+       "description": "User rejections and pinned assignments are honored",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "0 rejection(s) and 0 pin(s) honored",
+       "errorCode": null
+      }
+     ],
+     "explanations": [],
+     "warnings": [],
+     "verifiedAt": "2026-10-28T09:51:46+00:00",
+     "label": "Verified complete recovery"
+    },
+    "approvalStatus": "not_approved",
+    "statusLabel": "Verified complete recovery",
+    "signature": "T01:P02@885:R01+R04|T02:P02@955:R01|T03:P03@1005:R03|T04:P02@1050:R02",
+    "impactResolution": {
+     "T01": "recoverable",
+     "T02": "recoverable",
+     "T03": "recoverable",
+     "P04": "restored",
+     "M01": "restored"
+    }
+   }
+  ],
+  "duplicateStrategyNote": "3 strategies produced 1 distinct arrangement(s). Identical arrangements are shown once instead of manufacturing alternatives.",
+  "candidateCounts": {
+   "candidates": 56,
+   "tasks": 4
+  },
+  "totalElapsedMs": 549.99,
+  "solver": {
+   "name": "OR-Tools CP-SAT",
+   "workers": 1,
+   "seed": 1,
+   "timeLimitSecondsPerStrategy": 2.0,
+   "objectiveOrder": "lexicographic: Tier0 \u2192 Tier1 \u2192 Tier2 \u2192 Tier3 coverage \u2192 strategy preferences"
+  },
+  "warnings": [],
+  "householdVersion": 1,
+  "scenarioVersion": 1
+ },
+ "rec2_ms_roundtrip": 590,
+ "rec2": {
+  "requestedInputHash": "in-b75e923a07c4141b",
+  "simulationHash": "sc-c333169803b58588",
+  "engineVersion": "domino-engine/1.0.0",
+  "solverStatus": "OPTIMAL",
+  "plans": [
+   {
+    "planId": "plan-f2b69e4234",
+    "strategyId": "priority_first",
+    "strategyIds": [
+     "priority_first",
+     "minimum_change",
+     "balanced_workload"
+    ],
+    "label": "Priority First \u00b7 Minimum Change \u00b7 Balanced Workload",
+    "inputHash": "in-b75e923a07c4141b",
+    "assignments": [
+     {
+      "taskId": "T02",
+      "memberId": "P02",
+      "startMin": 955,
+      "endMin": 990,
+      "resourceIds": [
+       "R01"
+      ],
+      "itineraryId": "itin-grocery",
+      "changedFromBaseline": true
+     },
+     {
+      "taskId": "T04",
+      "memberId": "P02",
+      "startMin": 1050,
+      "endMin": 1080,
+      "resourceIds": [
+       "R02"
+      ],
+      "itineraryId": null,
+      "changedFromBaseline": false
+     }
+    ],
+    "uncoveredTaskIds": [
+     "T01",
+     "T03"
+    ],
+    "uncoveredCriticalTaskIds": [
+     "T01",
+     "T03"
+    ],
+    "uncoveredOtherTaskIds": [],
+    "completeRecovery": false,
+    "criticalRecovery": false,
+    "pendingConsentTaskIds": [],
+    "solverStatus": "OPTIMAL",
+    "solverElapsedMs": 10.42,
+    "objectives": [
+     {
+      "name": "tier0_weighted_coverage",
+      "value": 0.0
+     },
+     {
+      "name": "tier1_weighted_coverage",
+      "value": 6.0
+     },
+     {
+      "name": "tier3_weighted_coverage",
+      "value": 2.0
+     },
+     {
+      "name": "total_displacement_minutes",
+      "value": 0.0
+     },
+     {
+      "name": "changed_assignments",
+      "value": 1.0
+     }
+    ],
+    "metrics": {
+     "coveredByTier": {
+      "0": 0,
+      "1": 1,
+      "2": 0,
+      "3": 1
+     },
+     "totalByTier": {
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 1
+     },
+     "weightedCoverage": 0.3333,
+     "coveredCount": 2,
+     "totalCount": 4,
+     "reassignmentCount": 1,
+     "displacementMin": 0,
+     "workloadMinutes": {
+      "P01": 20,
+      "P02": 95,
+      "P03": 45
+     },
+     "workloadGini": 0.3125,
+     "maxWorkloadMin": 95
+    },
+    "changedTaskIds": [
+     "T02",
+     "T01",
+     "T03"
+    ],
+    "explanations": [
+     {
+      "id": "exp-T02",
+      "kind": "assignment_accepted",
+      "taskId": "T02",
+      "memberId": "P02",
+      "codes": [
+       "REASSIGNED"
+      ],
+      "text": "Khalid is eligible for Grocery collection because they hold permissions [drive] and skills [shopping], and Family sedan is available 15:55\u201316:30.",
+      "evidence": {
+       "permissions": [
+        "drive"
+       ],
+       "skills": [
+        "shopping"
+       ],
+       "resources": [
+        "R01"
+       ],
+       "interval": [
+        955,
+        990
+       ],
+       "baselineMember": "P01"
+      }
+     },
+     {
+      "id": "exp-T04",
+      "kind": "assignment_unchanged",
+      "taskId": "T04",
+      "memberId": "P02",
+      "codes": [
+       "UNCHANGED_FROM_BASELINE"
+      ],
+      "text": "Unchanged from baseline. Khalid is eligible for Dinner preparation because they hold permissions [none required] and skills [meal_prep], and Home kitchen is available 17:30\u201318:00.",
+      "evidence": {
+       "permissions": [],
+       "skills": [
+        "meal_prep"
+       ],
+       "resources": [
+        "R02"
+       ],
+       "interval": [
+        1050,
+        1080
+       ],
+       "baselineMember": "P02"
+      }
+     },
+     {
+      "id": "exp-T01",
+      "kind": "task_uncovered",
+      "taskId": "T01",
+      "memberId": null,
+      "codes": [
+       "MEMBER_UNAVAILABLE",
+       "MISSING_SKILL",
+       "MISSING_PERMISSION",
+       "MISSING_PERMISSION",
+       "RESTRICTED",
+       "RESTRICTED"
+      ],
+      "text": "School pickup cannot be covered: Amina: Amina is not available for any 40-minute slot within 14:40\u201315:45; Khalid: Khalid is not available for any 40-minute slot within 14:40\u201315:45; Noura: Noura lacks the skill 'driving'; Noura lacks the permission 'drive'; Noura lacks the permission 'pickup_authorized'; Noura has the restriction 'drive'; Noura has the restriction 'pickup_authorized'. DOMINO will not invent a caregiver, permission or resource.",
+      "evidence": {
+       "tier": 0
+      }
+     },
+     {
+      "id": "exp-T03",
+      "kind": "task_uncovered",
+      "taskId": "T03",
+      "memberId": null,
+      "codes": [
+       "PRECEDENCE_UNMET",
+       "MEMBER_UNAVAILABLE",
+       "MISSING_SKILL"
+      ],
+      "text": "Homework assistance cannot be covered: its prerequisite School pickup (T01) is itself uncovered, so this task cannot be counted as completed; Amina: Amina is not available for any 30-minute slot within 16:30\u201318:00; Khalid: Khalid lacks the skill 'homework_assist'; Noura is eligible, but the prerequisite T01 is uncovered. DOMINO will not invent a caregiver, permission or resource.",
+      "evidence": {
+       "tier": 1
+      }
+     }
+    ],
+    "rejectedAlternatives": {
+     "T01": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 40-minute slot within 14:40\u201315:45"
+      },
+      {
+       "memberId": "P02",
+       "memberName": "Khalid",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Khalid: Khalid is not available for any 40-minute slot within 14:40\u201315:45"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL",
+        "MISSING_PERMISSION",
+        "MISSING_PERMISSION",
+        "RESTRICTED",
+        "RESTRICTED"
+       ],
+       "text": "Noura: Noura lacks the skill 'driving'; Noura lacks the permission 'drive'; Noura lacks the permission 'pickup_authorized'; Noura has the restriction 'drive'; Noura has the restriction 'pickup_authorized'"
+      }
+     ],
+     "T02": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 35-minute slot within 15:00\u201317:30"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL",
+        "MISSING_PERMISSION",
+        "RESTRICTED"
+       ],
+       "text": "Noura: Noura lacks the skill 'shopping'; Noura lacks the permission 'drive'; Noura has the restriction 'drive'"
+      }
+     ],
+     "T03": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MEMBER_UNAVAILABLE"
+       ],
+       "text": "Amina: Amina is not available for any 30-minute slot within 16:30\u201318:00"
+      },
+      {
+       "memberId": "P02",
+       "memberName": "Khalid",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Khalid: Khalid lacks the skill 'homework_assist'"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "PRECEDENCE_UNMET"
+       ],
+       "text": "Noura is eligible, but the prerequisite T01 is uncovered"
+      }
+     ],
+     "T04": [
+      {
+       "memberId": "P01",
+       "memberName": "Amina",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Amina: Amina lacks the skill 'meal_prep'"
+      },
+      {
+       "memberId": "P03",
+       "memberName": "Noura",
+       "codes": [
+        "MISSING_SKILL"
+       ],
+       "text": "Noura: Noura lacks the skill 'meal_prep'"
+      }
+     ]
+    },
+    "validation": {
+     "planId": "plan-f2b69e4234",
+     "inputHash": "in-b75e923a07c4141b",
+     "expectedHash": "in-b75e923a07c4141b",
+     "overallStatus": "valid",
+     "completeness": "partial",
+     "hardViolations": 0,
+     "uncoveredCriticalTaskIds": [
+      "T01",
+      "T03"
+     ],
+     "checks": [
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V01",
+       "description": "Every referenced task, member and resource exists",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "all referenced entities exist",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "T02 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V02",
+       "description": "Each task has at most one primary assignment",
+       "affectedEntityIds": [
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "T04 assigned exactly once",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds skills ['shopping']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds permissions ['drive']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid is eligible for Grocery collection",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "15:55\u201316:30 fits 15:00\u201317:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid available over 15:55\u201316:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resources ['R01'] available over 15:55\u201316:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resource types ['vehicle'] satisfied by ['R01']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T02",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid authorized for no dependents required",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V03",
+       "description": "Assigned member holds all required skills and is not a dependent",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds skills ['meal_prep']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V04",
+       "description": "Assigned member holds all required explicit permissions and has no conflicting restriction",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid holds permissions [none required]",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V05",
+       "description": "Assigned member is on the task's eligibility list and not excluded",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid is eligible for Dinner preparation",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V06",
+       "description": "Assignment interval matches the task duration and lies inside the task window",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "17:30\u201318:00 fits 17:00\u201318:30",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V07",
+       "description": "Member is available for the entire interval",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid available over 17:30\u201318:00",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V09",
+       "description": "Every assigned resource is available for the entire interval",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resources ['R02'] available over 17:30\u201318:00",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V11",
+       "description": "Required resource types are satisfied by compatible, permitted resources",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "resource types ['kitchen'] satisfied by ['R02']",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V12",
+       "description": "Dependent care is performed only by a member specifically authorized for that dependent",
+       "affectedEntityIds": [
+        "T04",
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "Khalid authorized for no dependents required",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V08",
+       "description": "A member never performs overlapping assignments (including required travel gaps)",
+       "affectedEntityIds": [
+        "P02",
+        "T02",
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "2 assignment(s) for P02 do not overlap",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V14",
+       "description": "Itinerary and travel assumptions are respected",
+       "affectedEntityIds": [
+        "P02"
+       ],
+       "passed": true,
+       "evidence": "itinerary durations include transit; transitions respected",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R01",
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "Family sedan: 1 booking(s) within capacity 5 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V10",
+       "description": "Resource exclusivity and capacity are respected",
+       "affectedEntityIds": [
+        "R02",
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "Home kitchen: 1 booking(s) within capacity 1 and exclusive",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T02"
+       ],
+       "passed": true,
+       "evidence": "no prerequisites",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V13",
+       "description": "Predecessor tasks and milestones are completed before dependent tasks start",
+       "affectedEntityIds": [
+        "T04"
+       ],
+       "passed": true,
+       "evidence": "no prerequisites",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V15",
+       "description": "Plan corresponds to the current scenario hash",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "plan hash in-b75e923a07c4141b matches in-b75e923a07c4141b",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V16",
+       "description": "Coverage of critical tasks is reported accurately",
+       "affectedEntityIds": [
+        "T01",
+        "T03"
+       ],
+       "passed": true,
+       "evidence": "uncovered set ['T01', 'T03'] reported exactly",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V17",
+       "description": "Consent-dependent actions remain pending approval",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "consent pending for no tasks until each assignee confirms; DOMINO sends no notifications",
+       "errorCode": null
+      },
+      {
+       "ruleId": "V18",
+       "description": "User rejections and pinned assignments are honored",
+       "affectedEntityIds": [],
+       "passed": true,
+       "evidence": "0 rejection(s) and 0 pin(s) honored",
+       "errorCode": null
+      }
+     ],
+     "explanations": [],
+     "warnings": [
+      "Critical responsibilities remain uncovered: T01, T03"
+     ],
+     "verifiedAt": "2026-10-28T09:51:47+00:00",
+     "label": "Valid partial plan \u2014 human intervention required"
+    },
+    "approvalStatus": "not_approved",
+    "statusLabel": "Valid partial plan \u2014 human intervention required",
+    "signature": "T02:P02@955:R01|T04:P02@1050:R02",
+    "impactResolution": {
+     "T01": "unresolved",
+     "T02": "recoverable",
+     "T03": "unresolved",
+     "P04": "unresolved",
+     "M01": "unresolved"
+    }
+   }
+  ],
+  "duplicateStrategyNote": "3 strategies produced 1 distinct arrangement(s). Identical arrangements are shown once instead of manufacturing alternatives.",
+  "candidateCounts": {
+   "candidates": 42,
+   "tasks": 4
+  },
+  "totalElapsedMs": 247.23,
+  "solver": {
+   "name": "OR-Tools CP-SAT",
+   "workers": 1,
+   "seed": 1,
+   "timeLimitSecondsPerStrategy": 2.0,
+   "objectiveOrder": "lexicographic: Tier0 \u2192 Tier1 \u2192 Tier2 \u2192 Tier3 coverage \u2192 strategy preferences"
+  },
+  "warnings": [],
+  "householdVersion": 1,
+  "scenarioVersion": 1
+ },
+ "solver_ms_10_runs": [
+  51.45,
+  42.97,
+  54.07,
+  46.7,
+  158.42,
+  166.63,
+  139.74,
+  154.75,
+  125.87,
+  160.37
+ ]
+}

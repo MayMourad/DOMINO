@@ -1,0 +1,7 @@
+node_modules/
+render/
+assets/
+build.bak.mjs
+p*.py
+s25_new.txt
+montage.py
