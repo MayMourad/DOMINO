@@ -79,10 +79,26 @@ export default function EvaluationLab() {
   }
   const runAi = async () => {
     setAi({ status: 'running' })
-    try {
-      const r = await fetch(`${(import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''}/v1/benchmarks/ai-interpretation`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: aiEngine, dataset: aiSet }) })
+    const base = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''
+    const call = async (ids?: string[]) => {
+      const r = await fetch(`${base}/v1/benchmarks/ai-interpretation`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: aiEngine, dataset: aiSet, ids }) })
       if (!r.ok) throw new Error((await r.json()).error?.message ?? 'Request failed')
-      setAi({ status: 'ready', data: await r.json() })
+      return (await r.json()) as AiEval & { results: (AiEval['results'][number] & { entityOk?: boolean; typeOk?: boolean; timeOk?: boolean; uncertaintyOk?: boolean })[] }
+    }
+    try {
+      let data = await call(aiEngine === 'rules' ? undefined : (() => { const p = aiSet === 'heldout' ? 'H' : 'A'; return Array.from({ length: 4 }, (_, i) => `${p}${String(i + 1).padStart(2, '0')}`) })())
+      if (aiEngine === 'gemini' && data.executed) {            // Gemini is rate limited: evaluate in paced batches of 4 to stay inside the host's request timeout
+        const p = aiSet === 'heldout' ? 'H' : 'A'
+        for (const start of [5, 9]) {
+          const more = await call(Array.from({ length: 4 }, (_, i) => `${p}${String(start + i).padStart(2, '0')}`))
+          data = { ...data, results: [...data.results, ...more.results] }
+        }
+        const ok = data.results.filter((x) => x.status === 'ok') as (typeof data.results[number])[]
+        const rate = (k: 'entityOk' | 'typeOk' | 'timeOk' | 'uncertaintyOk' | 'exact') => (ok.length ? ok.filter((x) => x[k]).length / ok.length : null)
+        data = { ...data, total: data.results.length, completed: ok.length, errors: data.results.length - ok.length, entityAccuracy: rate('entityOk'), typeAccuracy: rate('typeOk'),
+          timeAccuracy: rate('timeOk'), uncertaintyAccuracy: rate('uncertaintyOk'), exactMatchAccuracy: rate('exact') }
+      }
+      setAi({ status: 'ready', data })
     } catch (e) { setAi({ status: 'error', error: (e as Error).message }) }
   }
   const exportJson = () => suite && download('domino-benchmark.json', 'application/json', JSON.stringify(suite, null, 2))

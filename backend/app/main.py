@@ -254,7 +254,10 @@ def bench_ai(request: Request, body: dict[str, Any] | None = None) -> dict[str, 
     if engine not in ("gemini", "rules") or dataset not in ("annotated", "heldout"):
         raise ApiError("INVALID_REQUEST", "engine must be gemini|rules and dataset annotated|heldout.", 422)
     limiter.check("bench-ai:" + client_key(request) + engine, 2 if engine == "gemini" else 20)
-    return _guarded(benchmarks.run_ai_eval, engine, dataset)
+    ids = (body or {}).get("ids")
+    if ids is not None and (not isinstance(ids, list) or len(ids) > 12 or not all(isinstance(i, str) for i in ids)):
+        raise ApiError("INVALID_REQUEST", "ids must be a list of at most 12 sentence ids.", 422)
+    return _guarded(benchmarks.run_ai_eval, engine, dataset, ids)
 
 
 app.include_router(v1)

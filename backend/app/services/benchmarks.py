@@ -442,8 +442,8 @@ def _event_tuples(events: list[Disruption]) -> set[tuple[str, str, int, int]]:
     return {(e.type, eid, e.startMin, e.endMin) for e in events for eid in e.affectedEntityIds}
 
 
-def run_ai_eval(engine: str = "gemini", dataset: str = "annotated") -> dict[str, Any]:
-    sentences = ai_sentences(dataset)
+def run_ai_eval(engine: str = "gemini", dataset: str = "annotated", ids: Optional[list[str]] = None) -> dict[str, Any]:
+    sentences = [s for s in ai_sentences(dataset) if not ids or s["id"] in ids]
     if engine == "gemini" and not ip.ai_available():
         return {"executed": False, "reason": "No Gemini API key is configured on the server, so the annotated sentences were NOT run. "
                 "No accuracy value is reported.", "total": len(sentences), "results": []}
@@ -453,7 +453,18 @@ def run_ai_eval(engine: str = "gemini", dataset: str = "annotated") -> dict[str,
         t0 = time.perf_counter()
         rec: dict[str, Any] = {"id": s["id"], "text": s["text"], "nowMin": s.get("nowMin"), "expected": s["expected"]}
         try:
-            out = ip.interpret(h, s["text"], s.get("nowMin"), engine=engine)
+            out = None
+            for attempt in range(2):  # Gemini's free tier is rate limited: pace calls and retry once instead of scoring a provider error as a miss
+                try:
+                    out = ip.interpret(h, s["text"], s.get("nowMin"), engine=engine)
+                    break
+                except ApiError as pe:
+                    if pe.code != "AI_RATE_LIMITED" or attempt == 1:
+                        raise
+                    time.sleep(20)
+            if engine == "gemini":
+                time.sleep(4)
+            assert out is not None
             exp = s["expected"]
             got = _event_tuples(out.proposedEvents)
             want = {(e["type"], eid, e["startMin"], e["endMin"]) for e in exp.get("events", []) for eid in e["entityIds"]}
