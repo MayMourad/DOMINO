@@ -109,6 +109,7 @@ v1 = APIRouter(prefix="/v1")
 @v1.get("/health")
 def health() -> dict[str, Any]:
     return {"status": "ok", "engineVersion": ENGINE_VERSION, "solver": "OR-Tools CP-SAT",
+            "interpreter": {"rules": True, "gemini": interpreter.ai_available()},
             "ai": {"available": interpreter.ai_available(), "model": settings.gemini_model if interpreter.ai_available() else None,
                    "warning": settings.gemini_model_warning},
             "benchmarksEnabled": settings.benchmark_runs_enabled, "time": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -140,7 +141,7 @@ def validate_household_ep(req: HouseholdValidateRequest) -> dict[str, Any]:
 @v1.post("/events/interpret")
 def interpret_ep(req: InterpretRequest, request: Request) -> dict[str, Any]:
     limiter.check("ai:" + client_key(request), settings.interpret_rate_per_minute)
-    return interpreter.interpret(req.householdSnapshot, req.text, req.nowMin).model_dump(mode="json")
+    return interpreter.interpret(req.householdSnapshot, req.text, req.nowMin, engine=req.engine).model_dump(mode="json")
 
 
 def _guarded(fn, *a, **kw):
@@ -245,11 +246,15 @@ _ = scenario_hash
 
 
 @v1.post("/benchmarks/ai-interpretation")
-def bench_ai(request: Request) -> dict[str, Any]:
+def bench_ai(request: Request, body: dict[str, Any] | None = None) -> dict[str, Any]:
     if not settings.benchmark_runs_enabled:
         raise ApiError("BENCHMARKS_DISABLED", "Benchmark runs are disabled on this server.", 403)
-    limiter.check("bench-ai:" + client_key(request), 2)
-    return _guarded(benchmarks.run_ai_eval)
+    engine = (body or {}).get("engine", "gemini")
+    dataset = (body or {}).get("dataset", "annotated")
+    if engine not in ("gemini", "rules") or dataset not in ("annotated", "heldout"):
+        raise ApiError("INVALID_REQUEST", "engine must be gemini|rules and dataset annotated|heldout.", 422)
+    limiter.check("bench-ai:" + client_key(request) + engine, 2 if engine == "gemini" else 20)
+    return _guarded(benchmarks.run_ai_eval, engine, dataset)
 
 
 app.include_router(v1)

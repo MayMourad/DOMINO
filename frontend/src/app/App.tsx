@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { Activity, BarChart3, FlaskConical, GitBranch, Network, RefreshCw, Rocket, Sparkles, WifiOff, Wrench, X } from 'lucide-react'
 import { SCREENS, useStore, type ScreenId } from '../state/store'
 import { Banner, Empty } from '../components/ui/ui'
+import { COMPETITION, TEAM } from '../lib/team'
 import Launch from '../screens/Launch'
 import FamilyNetwork from '../screens/FamilyNetwork'
 import DisruptionStudio from '../screens/DisruptionStudio'
@@ -78,7 +79,7 @@ export function App() {
             {apiStatus === 'offline' ? <WifiOff size={12} aria-hidden /> : <Activity size={12} aria-hidden />}
             {apiStatus === 'online' ? `API online · ${health?.solver ?? 'CP-SAT'}` : apiStatus === 'offline' ? 'API offline' : 'Connecting…'}
           </span>
-          {health && <span className={`chip ${health.ai.available ? 'ok' : 'warn'}`} title="Natural-language interpretation (Gemini)">{health.ai.available ? 'AI interpreter ready' : 'AI interpreter unavailable'}</span>}
+          {health && <span className="chip ok" title="Natural-language interpretation engines">{health.ai.available ? 'Language: Gemini + built-in parser' : 'Language: built-in parser'}</span>}
           {apiStatus === 'offline' && <button className="btn sm" onClick={() => void boot()}><RefreshCw size={13} aria-hidden /> Retry</button>}
         </header>
         <main className="page" id="main">
@@ -92,6 +93,10 @@ export function App() {
             {view}
           </motion.div>
         </main>
+        <footer className="credits" aria-label="Project team">
+          <b>DOMINO</b> — created by {TEAM.map((t, i) => <span key={t.name}>{i > 0 && ' · '}{t.name} <span className="mono">({t.grade})</span></span>)}
+          <div className="muted">{COMPETITION}. All households are fictional; no real family data is used.</div>
+        </footer>
       </div>
       <div className="toasts" aria-live="polite">
         {toasts.map((t) => (

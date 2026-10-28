@@ -216,6 +216,7 @@ class InterpretRequest(BaseModel):
     householdSnapshot: Household
     text: str
     nowMin: Optional[int] = None
+    engine: Literal["auto", "gemini", "rules"] = "auto"
 
 
 __all__ = [n for n in dir() if not n.startswith("_")]

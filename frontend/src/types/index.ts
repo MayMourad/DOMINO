@@ -116,10 +116,12 @@ export interface EventInterpretation {
   proposedEvents: Disruption[]; resolvedEntityIds: string[]; unresolvedMentions: string[]
   ambiguities: string[]; assumptions: string[]; requiredConfirmations: string[]
   interpretationStatus: 'ready_for_review' | 'needs_clarification' | 'invalid'; warnings: string[]; model?: string | null
+  engine: 'gemini' | 'rules' | 'test-double'; engineNote?: string | null
 }
 export interface FixtureSummary { id: string; name: string; description: string; members: number; tasks: number; resources: number }
 export interface Health {
   status: string; engineVersion: string; solver: string
+  interpreter?: { rules: boolean; gemini: boolean }
   ai: { available: boolean; model: string | null; warning?: string | null }; benchmarksEnabled: boolean; time: string
 }
 export interface BenchResult {

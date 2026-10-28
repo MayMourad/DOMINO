@@ -1,5 +1,7 @@
 # Attribution and references
 
+DOMINO was created by May Ahmed Mourad (G12), Shamsa Faris Almazrouei (G12) and Fatima Mohamed Almazrouei (G11).
+
 ## Libraries (permissive licences; see each package)
 - **React Flow / `@xyflow/react`** — MIT. The “React Flow” attribution link is intentionally left visible in every graph (`proOptions.hideAttribution = false`). Custom nodes/edges/layout are original; no paid Pro example code is used.
 - **Motion** (`motion`) — MIT; used for layout (shared `layoutId`) transitions and panel fades.

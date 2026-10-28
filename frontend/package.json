@@ -40,5 +40,7 @@
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
-  }
+  },
+  "author": "May Ahmed Mourad, Shamsa Faris Almazrouei, Fatima Mohamed Almazrouei",
+  "description": "DOMINO \u2014 Family Resilience Intelligence System (frontend)"
 }

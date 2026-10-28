@@ -237,10 +237,15 @@ def system_check(name: str, ctx: Ctx, case: dict[str, Any]) -> Optional[str]:
         if ip.ai_available():
             return "A Gemini key is configured, so the missing-credentials path cannot be exercised here."
         try:
-            ip.interpret(h, "Amina is out until 6 PM", 870)
+            ip.interpret(h, "Amina is out until 6 PM", 870, engine="gemini")
             ctx.extra = {"code": None}
         except ApiError as e:
             ctx.extra = {"code": e.code, "status": e.status}
+    elif name == "rules_fallback":
+        out = ip.interpret(h, "Amina cannot help until 6 PM", 870, engine="rules")
+        ctx.extra = {"engine": out.engine, "events": len(out.proposedEvents), "confirmed": any(e.confirmed for e in out.proposedEvents),
+                     "entity": out.proposedEvents[0].affectedEntityIds if out.proposedEvents else None,
+                     "window": [out.proposedEvents[0].startMin, out.proposedEvents[0].endMin] if out.proposedEvents else None}
     elif name == "solver_unknown_status":
         from ortools.sat.python import cp_model
         ctx.extra = {"mapped": map_status(cp_model.UNKNOWN), "optimal": map_status(cp_model.OPTIMAL),
@@ -428,17 +433,18 @@ __all__ = ["run_suite", "run_case", "load_cases", "catalog", "environment", "inp
 
 
 # ------------------------------------------------------------------ AI interpretation evaluation (real Gemini only)
-def ai_sentences() -> list[dict[str, Any]]:
-    return json.loads((Path(settings.data_dir) / "benchmarks" / "ai_sentences.json").read_text(encoding="utf-8"))
+def ai_sentences(dataset: str = "annotated") -> list[dict[str, Any]]:
+    name = "ai_sentences.json" if dataset == "annotated" else "ai_sentences_heldout.json"
+    return json.loads((Path(settings.data_dir) / "benchmarks" / name).read_text(encoding="utf-8"))
 
 
 def _event_tuples(events: list[Disruption]) -> set[tuple[str, str, int, int]]:
     return {(e.type, eid, e.startMin, e.endMin) for e in events for eid in e.affectedEntityIds}
 
 
-def run_ai_eval() -> dict[str, Any]:
-    sentences = ai_sentences()
-    if not ip.ai_available():
+def run_ai_eval(engine: str = "gemini", dataset: str = "annotated") -> dict[str, Any]:
+    sentences = ai_sentences(dataset)
+    if engine == "gemini" and not ip.ai_available():
         return {"executed": False, "reason": "No Gemini API key is configured on the server, so the annotated sentences were NOT run. "
                 "No accuracy value is reported.", "total": len(sentences), "results": []}
     h = load_fixture("amina")
@@ -447,7 +453,7 @@ def run_ai_eval() -> dict[str, Any]:
         t0 = time.perf_counter()
         rec: dict[str, Any] = {"id": s["id"], "text": s["text"], "nowMin": s.get("nowMin"), "expected": s["expected"]}
         try:
-            out = ip.interpret(h, s["text"], s.get("nowMin"))
+            out = ip.interpret(h, s["text"], s.get("nowMin"), engine=engine)
             exp = s["expected"]
             got = _event_tuples(out.proposedEvents)
             want = {(e["type"], eid, e["startMin"], e["endMin"]) for e in exp.get("events", []) for eid in e["entityIds"]}
@@ -474,7 +480,8 @@ def run_ai_eval() -> dict[str, Any]:
     def rate(k: str) -> Optional[float]:
         return round(sum(1 for r in ok if r[k]) / n, 4) if n else None
 
-    return {"executed": True, "model": settings.gemini_model, "total": len(sentences), "completed": n,
+    return {"executed": True, "engine": engine, "dataset": dataset, "model": settings.gemini_model if engine == "gemini" else "built-in rule parser",
+            "total": len(sentences), "completed": n,
             "errors": len(results) - n, "entityAccuracy": rate("entityOk"), "typeAccuracy": rate("typeOk"),
             "timeAccuracy": rate("timeOk"), "uncertaintyAccuracy": rate("uncertaintyOk"), "exactMatchAccuracy": rate("exact"),
             "executedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "results": results}

@@ -4,6 +4,7 @@ import { Constellation } from '../components/graph/Constellation'
 import { MemberEditor, ResourceEditor, TaskEditor, blankTask } from '../components/forms/Editors'
 import { Banner, Modal } from '../components/ui/ui'
 import { bundledFixture, bundledSummaries } from '../services/fixtures'
+import { COMPETITION, TEAM } from '../lib/team'
 import { useStore } from '../state/store'
 import type { FamilyMember, Household } from '../types'
 
@@ -35,6 +36,7 @@ export default function Launch() {
         <div className="hero-canvas">{preview && <Constellation h={preview} height={560} />}</div>
         <div style={{ position: 'relative', padding: 'clamp(24px, 4vw, 56px)', maxWidth: 640, pointerEvents: 'none' }}>
           <div className="wordmark">DOMINO · FAMILY RESILIENCE INTELLIGENCE SYSTEM</div>
+          <div className="mono" style={{ fontSize: 11.5, color: '#a9c6df', marginTop: 4 }}>{TEAM.map((t) => `${t.name} (${t.grade})`).join(' · ')}</div>
           <h1 id="hero-title" style={{ margin: '14px 0' }}>When one thing changes, everything connects.</h1>
           <p style={{ fontSize: 17, color: '#cfe1f1', maxWidth: 520 }}>Explore how family responsibilities interact, simulate disruptions, and calculate verified recovery plans.</p>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 22, pointerEvents: 'auto' }}>
@@ -70,6 +72,15 @@ export default function Launch() {
           ))}
         </div>
         <p className="muted" style={{ fontSize: 12, marginTop: 10 }}>All households are fictional. DOMINO models hypothetical events with the information you give it; it does not predict real emergencies or contact anyone.</p>
+      </section>
+
+      <section className="card card-pad" aria-labelledby="team-title">
+        <div className="eyebrow">Team</div>
+        <h2 id="team-title" style={{ fontSize: 20, margin: '2px 0 8px' }}>Built by</h2>
+        <ul style={{ display: 'flex', gap: 10, flexWrap: 'wrap', listStyle: 'none', padding: 0, margin: 0 }}>
+          {TEAM.map((t) => <li key={t.name} className="chip" style={{ fontSize: 13, padding: '5px 12px' }}>{t.name} · <span className="mono">{t.grade}</span></li>)}
+        </ul>
+        <p className="muted" style={{ margin: '10px 0 0', fontSize: 12.5 }}>{COMPETITION}</p>
       </section>
 
       <Modal open={how} onClose={() => setHow(false)} title={`How DOMINO works · step ${step + 1} of ${STEPS.length}`}>

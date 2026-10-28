@@ -3,6 +3,7 @@ name = "domino-backend"
 version = "1.0.0"
 description = "DOMINO — Family Resilience Intelligence System (FastAPI + OR-Tools CP-SAT)"
 requires-python = ">=3.11"
+authors = [{ name = "May Ahmed Mourad" }, { name = "Shamsa Faris Almazrouei" }, { name = "Fatima Mohamed Almazrouei" }]
 dependencies = [
   "fastapi>=0.115",
   "uvicorn[standard]>=0.30",

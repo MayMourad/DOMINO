@@ -72,7 +72,7 @@
   "kind": "system",
   "description": "Missing Gemini credentials",
   "expected": [
-   "Honest 503 AI_UNAVAILABLE; manual form still works"
+   "Explicit Gemini without a key \u2192 honest 503 (auto mode uses the built-in parser)"
   ],
   "assert": {
    "extra": {
@@ -83,6 +83,34 @@
   "events": [],
   "ops": [],
   "check": "missing_credentials"
+ },
+ {
+  "id": "E18",
+  "title": "Built-in rule parser interprets without any AI key",
+  "group": "ai",
+  "household": "amina",
+  "kind": "system",
+  "description": "Built-in rule parser interprets without any AI key",
+  "expected": [
+   "'Amina cannot help until 6 PM' \u2192 one unconfirmed member_unavailable event for P01, 14:30\u201318:00 from the scenario clock"
+  ],
+  "assert": {
+   "extra": {
+    "engine": "rules",
+    "events": 1,
+    "confirmed": false,
+    "entity": [
+     "P01"
+    ],
+    "window": [
+     870,
+     1080
+    ]
+   }
+  },
+  "events": [],
+  "ops": [],
+  "check": "rules_fallback"
  },
  {
   "id": "E05",

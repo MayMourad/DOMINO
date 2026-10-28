@@ -91,3 +91,29 @@ describe('stale-response prevention', () => {
     expect(useStore.getState().draft?.name).toBe(amina().name)
   })
 })
+
+describe('household operations', () => {
+  it('removing an entity cleans up every reference so the household stays valid', async () => {
+    const { removeEntity, blankMember, blankResource } = await import('../lib/householdOps')
+    const h = amina()
+    const noMember = removeEntity(h, 'P01')
+    expect(noMember.members.some((m) => m.id === 'P01')).toBe(false)
+    expect(noMember.baselineAssignments.every((a) => a.memberId !== 'P01')).toBe(true)
+    const noTask = removeEntity(h, 'T01')
+    expect(noTask.milestones[0].enabledByTaskIds).toEqual([])
+    expect(noTask.baselineAssignments.some((a) => a.taskId === 'T01')).toBe(false)
+    const noRes = removeEntity(h, 'R01')
+    expect(noRes.baselineAssignments.every((a) => !a.resourceIds.includes('R01'))).toBe(true)
+    expect(blankMember(h).id).toBe('P05')
+    expect(blankResource(h).id).toBe('R05')
+    expect(h.members.length).toBe(4)                                  // input untouched
+  })
+  it('exports a calendar file without sending anything', async () => {
+    const { planToIcs } = await import('../lib/exportPlan')
+    const h = amina()
+    const ics = planToIcs(h, { planId: 'p1', assignments: h.baselineAssignments, pendingConsentTaskIds: ['T01'] } as never)
+    expect(ics).toContain('BEGIN:VCALENDAR')
+    expect(ics).toContain('DTSTART;TZID=Asia/Dubai:20261029T144500')
+    expect(ics).toContain('Assignee consent still required')
+  })
+})

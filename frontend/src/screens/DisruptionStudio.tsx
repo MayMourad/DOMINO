@@ -56,9 +56,11 @@ export default function DisruptionStudio() {
   const [edited, setEdited] = useState<Disruption[]>([])
   const [err, setErr] = useState<{ code: string; msg: string } | null>(null)
   const [reviewed, setReviewed] = useState(false)
+  const [engine, setEngine] = useState<'auto' | 'gemini' | 'rules'>('auto')
   const ctl = useRef<AbortController | null>(null)
   if (!h) return null
-  const aiOn = !!health?.ai.available && apiStatus === 'online'
+  const geminiOn = !!health?.ai.available
+  const aiOn = apiStatus === 'online'            // the built-in rule parser needs no AI key, so interpretation works whenever the API does
   const presets = buildPresets(h)
   const allConfirmed = events.length > 0 && events.every((e) => e.confirmed)
   const calculating = sim.status === 'calculating'
@@ -73,7 +75,7 @@ export default function DisruptionStudio() {
     ctl.current?.abort(); ctl.current = new AbortController()
     setInterp('interpreting'); setErr(null); setResult(null); setReviewed(false)
     try {
-      const r = await api.interpret(h, text, clock, ctl.current.signal)
+      const r = await api.interpret(h, text, clock, ctl.current.signal, engine)
       setResult(r); setEdited(r.proposedEvents); setInterp('review')
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') { setInterp('idle'); return }
@@ -132,7 +134,15 @@ export default function DisruptionStudio() {
 
         <section className="card card-pad" aria-labelledby="nl">
           <h3 id="nl"><Sparkles size={15} aria-hidden /> Describe it in plain language</h3>
-          {!aiOn && <Banner kind="warn">Natural-language interpretation is <b>unavailable</b>{apiStatus === 'offline' ? ' (backend offline)' : ': no Gemini API key is configured on the server'}. Use presets or the manual form — both work fully.</Banner>}
+          {apiStatus === 'offline'
+            ? <Banner kind="warn">The backend is offline, so text cannot be interpreted right now. Presets and the manual form can still be staged; they run when the API is back.</Banner>
+            : <p className="muted" style={{ margin: '2px 0 0', fontSize: 12.5 }}>
+              Interpreter: <b>{geminiOn ? `Gemini (${health?.ai.model}) with automatic fallback to the built-in rule parser` : 'built-in rule parser (deterministic, needs no AI key)'}</b>.
+              The result is only a <i>proposal</i> — you review and confirm every field.</p>}
+          {geminiOn && (
+            <div className="field" style={{ marginTop: 6 }}><label htmlFor="nl-engine">Engine</label>
+              <select id="nl-engine" className="input" value={engine} onChange={(e) => setEngine(e.target.value as 'auto' | 'gemini' | 'rules')}>
+                <option value="auto">Auto (Gemini, falling back to the built-in parser)</option><option value="gemini">Gemini only</option><option value="rules">Built-in rule parser only</option></select></div>)}
           <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
             <div className="field"><label htmlFor="nl-text">Message</label>
               <textarea id="nl-text" className="input" rows={3} maxLength={600} value={text} placeholder={`e.g. “${h.members.find((m) => !m.isDependent)?.name ?? 'Amina'} cannot help until 6 PM”`} onChange={(e) => setText(e.target.value)} disabled={!aiOn} /></div>
@@ -149,10 +159,11 @@ export default function DisruptionStudio() {
           </div>
           {interp === 'review' && result && (
             <div style={{ marginTop: 14, display: 'grid', gap: 10, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
-              <div className="eyebrow">Review extracted details · {result.interpretationStatus.replace('_', ' ')}</div>
+              <div className="eyebrow">Review extracted details · {result.interpretationStatus.replace('_', ' ')} · interpreted by {result.engine === 'gemini' ? `Gemini (${result.model})` : 'built-in rule parser'}</div>
+              {result.engineNote && <Banner kind="info">{result.engineNote}</Banner>}
               {result.warnings.map((w) => <Banner key={w} kind="warn">{w}</Banner>)}
               {result.unresolvedMentions.length > 0 && <Banner kind="bad">Unknown names (not in this household): <b>{result.unresolvedMentions.join(', ')}</b>. They were not invented.</Banner>}
-              {result.ambiguities.map((a) => <Banner key={a} kind="warn">{a}</Banner>)}
+              {result.ambiguities.filter((a) => !a.startsWith('Unknown names')).map((a) => <Banner key={a} kind="warn">{a}</Banner>)}
               {result.assumptions.map((a) => <Banner key={a} kind="info">Assumption: {a}</Banner>)}
               {edited.map((e, i) => (<div key={e.id} className="card card-pad" style={{ background: 'var(--surface-2)' }}><EventFields h={h} ev={e} onChange={(n) => setEdited(edited.map((x, j) => (j === i ? n : x)))} /></div>))}
               {edited.length === 0 && <Banner kind="bad">Nothing could be safely interpreted. Rephrase, or use the manual form.</Banner>}

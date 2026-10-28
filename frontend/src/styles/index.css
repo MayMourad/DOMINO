@@ -191,3 +191,15 @@ dialog.modal::backdrop { background: rgba(8, 24, 46, 0.55); backdrop-filter: blu
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }
 :root[data-reduced-motion='true'] *, :root[data-reduced-motion='true'] *::before, :root[data-reduced-motion='true'] *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+
+.credits { border-top: 1px solid var(--line); padding: 14px 24px 20px; font-size: 12.5px; color: var(--ink-2); max-width: 1560px; margin: 0 auto; box-sizing: border-box; }
+@media (max-width: 860px) { .credits { padding: 12px 14px 80px; } }
+@media print { .rail, .topbar, .toasts, .no-print { display: none !important; } .shell { display: block; } }
+.print-only { display: none; }
+@media print {
+  body.print-plan .page > *:not(.print-only) { display: none !important; }
+  body.print-plan .print-only { display: block !important; color: #000; }
+  body.print-plan .print-only table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  body.print-plan .print-only th, body.print-plan .print-only td { border: 1px solid #888; padding: 6px 8px; text-align: left; }
+  body.print-plan .credits { display: none; }
+}

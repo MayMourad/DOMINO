@@ -1,5 +1,7 @@
 # Competition clarifications
 
+Team: May Ahmed Mourad (G12), Shamsa Faris Almazrouei (G12), Fatima Mohamed Almazrouei (G11).
+
 Event: Abu Dhabi University 6th Annual COE STEM Programming with AI Competition — Thursday 29 October 2026, 3:00–6:00 PM UAE time, virtual; theme *AI for Family*; Cycle 3 (Grades 9–12), classification decided by the organizers.
 
 ## Resolved by the project owner (2026-10-27)

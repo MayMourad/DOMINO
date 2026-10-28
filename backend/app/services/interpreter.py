@@ -18,6 +18,7 @@ from pydantic import BaseModel, ValidationError
 
 from ..config import settings
 from ..models.domain import ApiError, Disruption, Household
+from . import rule_parser
 from . import timeutil as tu
 
 EVENT_TYPES = ["member_unavailable", "resource_unavailable", "task_rescheduled", "availability_changed",
@@ -53,6 +54,8 @@ class EventInterpretation(BaseModel):
     interpretationStatus: Literal["ready_for_review", "needs_clarification", "invalid"]
     warnings: list[str] = []
     model: Optional[str] = None
+    engine: str = "rules"
+    engineNote: Optional[str] = None
 
 
 def ai_available() -> bool:
@@ -165,14 +168,32 @@ def resolve_mention(h: Household, etype: str, mention: str) -> tuple[list[str], 
 
 
 def interpret(h: Household, text: str, now_min: Optional[int] = None,
-              llm: Optional[Callable[[Household, str, Optional[int]], dict[str, Any]]] = None) -> EventInterpretation:
+              llm: Optional[Callable[[Household, str, Optional[int]], dict[str, Any]]] = None,
+              engine: str = "auto") -> EventInterpretation:
+    """engine: 'auto' (Gemini when configured and healthy, otherwise the built-in rule parser), 'gemini', or 'rules'."""
     text = (text or "").strip()
     if not text:
         raise ApiError("EMPTY_INPUT", "Enter a description of the disruption.", 422)
     if len(text) > 600:
         raise ApiError("INPUT_TOO_LONG", "Please keep the description under 600 characters.", 422)
-    extraction = (llm or call_gemini)(h, text, now_min)
     warnings: list[str] = []
+    engine_note: Optional[str] = None
+    if llm is not None:
+        extraction, engine_used = llm(h, text, now_min), "test-double"
+    elif engine == "rules" or (engine == "auto" and not ai_available()):
+        extraction, engine_used = rule_parser.parse(h, text, now_min), "rules"
+        engine_note = ("Interpreted by DOMINO's built-in rule parser (works offline, no AI key). "
+                       if engine == "rules" else "Gemini is not configured on this server, so DOMINO's built-in rule parser interpreted the text. ") \
+            + "Review every field before confirming."
+    else:
+        try:
+            extraction, engine_used = call_gemini(h, text, now_min), "gemini"
+        except ApiError as exc:
+            if engine == "gemini":
+                raise
+            extraction, engine_used = rule_parser.parse(h, text, now_min), "rules"
+            engine_note = f"Gemini was unavailable ({exc.code}), so the built-in rule parser interpreted the text. Review every field."
+            warnings.append(engine_note)
     if INJECTION_RE.search(text):
         warnings.append("The text contained instruction-like phrases. They were ignored: DOMINO only extracts "
                         "disruptions and never changes rules or approves plans from text.")
@@ -246,4 +267,4 @@ def interpret(h: Household, text: str, now_min: Optional[int] = None,
         proposedEvents=events, resolvedEntityIds=sorted(set(resolved)), unresolvedMentions=sorted(set(unresolved)),
         ambiguities=list(dict.fromkeys(ambiguities)), assumptions=list(dict.fromkeys(assumptions)),
         requiredConfirmations=confirmations, interpretationStatus=status, warnings=warnings,  # type: ignore[arg-type]
-        model=settings.gemini_model if llm is None else "injected-test-double")
+        model=settings.gemini_model if engine_used == "gemini" else None, engine=engine_used, engineNote=engine_note)

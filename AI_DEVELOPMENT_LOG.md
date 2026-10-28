@@ -1,5 +1,7 @@
 # AI development log
 
+Project team: May Ahmed Mourad (G12), Shamsa Faris Almazrouei (G12), Fatima Mohamed Almazrouei (G11).
+
 This file indexes AI-assisted work. It does **not** contain chat transcripts, and none were reconstructed. The project owner must export the genuine chats (for the required single PDF) from the tool that held them.
 
 | Date | Session / tool | Task | Key decisions | Evidence |

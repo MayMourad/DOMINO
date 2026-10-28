@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, CheckCircle2, Layers, Loader2, RefreshCw, Shuffle, Undo2 } from 'lucide-react'
+import { ArrowRight, CalendarDays, CheckCircle2, FileJson, Layers, Loader2, Printer, RefreshCw, Shuffle, Undo2 } from 'lucide-react'
 import { FamilyGraph, GraphLegend } from '../components/graph/FamilyGraph'
 import { GraphTextAlternative, ScheduleStrip } from '../components/timeline/Timelines'
 import { ApprovalDialog, AssignmentList, CoverageSummary, ExplanationDrawer, StatusPill, VerificationPanel, planTone } from '../components/plans/Plans'
 import { Banner, Empty, PageHeader } from '../components/ui/ui'
 import { memberName } from '../lib/graph'
+import { download, planSummary, planToIcs } from '../lib/exportPlan'
+import { fmtRange } from '../lib/time'
 import { selectedPlan, useStore } from '../state/store'
 import type { Assignment, Household, RecoveryPlan } from '../types'
 
@@ -52,6 +54,9 @@ export default function RecoveryStudio() {
       <PageHeader eyebrow="05 · Recovery Studio" title="Calculated recovery">
         <button className="btn" onClick={() => setView(view === 'plan' ? 'baseline' : 'plan')}><Undo2 size={15} /> {view === 'plan' ? 'Return to original schedule' : 'Show recovery plan'}</button>
         <button className="btn" disabled={calculating} onClick={() => void generateRecovery({ rejections, pins })}><RefreshCw size={15} /> Rerun optimization</button>
+        <button className="btn" disabled={!plan} onClick={() => plan && download(`domino-plan-${plan.planId}.json`, 'application/json', JSON.stringify(planSummary(h, events, plan, receipt), null, 2))}><FileJson size={15} /> Plan (JSON)</button>
+        <button className="btn" disabled={!plan} onClick={() => plan && download(`domino-plan-${plan.planId}.ics`, 'text/calendar', planToIcs(h, plan))} title="Calendar file to open yourself; DOMINO sends no invitations"><CalendarDays size={15} /> Calendar (.ics)</button>
+        <button className="btn" disabled={!plan} onClick={() => { document.body.classList.add('print-plan'); window.print(); setTimeout(() => document.body.classList.remove('print-plan'), 500) }}><Printer size={15} /> Print / PDF</button>
         <button className="btn primary" disabled={!plan || plan.validation.overallStatus !== 'valid'} onClick={() => setApprove(true)}><CheckCircle2 size={15} /> Review &amp; approve</button>
       </PageHeader>
 
@@ -135,6 +140,16 @@ export default function RecoveryStudio() {
         </div>
       )}
 
+      {plan && (
+        <section className="print-only" aria-hidden>
+          <h1>DOMINO — {h.name}: recovery plan ({plan.label})</h1>
+          <p>{plan.statusLabel}. Independent verification: {plan.validation.overallStatus} (failed checks: {plan.validation.hardViolations}). Simulation only — nothing was sent to anyone.</p>
+          <table><thead><tr><th>Responsibility</th><th>Assignee</th><th>Time</th></tr></thead><tbody>
+            {plan.assignments.map((a) => <tr key={a.taskId}><td>{h.tasks.find((t) => t.id === a.taskId)?.title}</td><td>{memberName(h, a.memberId)}</td><td>{fmtRange(a.startMin, a.endMin)}</td></tr>)}
+            {plan.uncoveredTaskIds.map((t) => <tr key={t}><td>{h.tasks.find((x) => x.id === t)?.title}</td><td colSpan={2}><b>UNCOVERED{plan.uncoveredCriticalTaskIds.includes(t) ? ' (critical)' : ''} — needs a human</b></td></tr>)}
+          </tbody></table>
+          <p>Created with DOMINO by May Ahmed Mourad (G12), Shamsa Faris Almazrouei (G12), Fatima Mohamed Almazrouei (G11).</p>
+        </section>)}
       {plan && <ApprovalDialog plan={plan} open={approve} onClose={() => setApprove(false)} h={h as Household} />}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}><button className="btn primary" onClick={() => go('futures')}>Explore alternate futures <ArrowRight size={15} /></button></div>
     </div>

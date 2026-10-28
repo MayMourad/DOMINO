@@ -1,5 +1,7 @@
 ﻿# DOMINO â€” Family Resilience Intelligence System
 
+**Team:** May Ahmed Mourad (G12) · Shamsa Faris Almazrouei (G12) · Fatima Mohamed Almazrouei (G11)
+
 > When one part of family life changes, DOMINO calculates what happens next â€” and helps the family find a verified way forward.
 
 DOMINO is a **computational family digital twin and recovery planner**, built for the Abu Dhabi University 6th Annual COE STEM Programming with AI Competition (theme: *AI for Family*, Cycle 3). It is **not** a calendar, a to-do list, or a chatbot: it models a household as a typed dependency graph, finds what a hypothetical disruption invalidates (directly and downstream), solves for legal recovery assignments with **Google OR-Tools CP-SAT**, and re-checks every plan with a **separate, independent verifier** before a human approves it.
@@ -18,6 +20,7 @@ All households are **fictional**. DOMINO simulates hypothetical events from the 
 | 7 screens (Launch, Network, Disruption Studio, Cascade Lab, Recovery Studio, Futures Lab, Evaluation Lab) | Implemented; flows covered by Playwright |
 | 3D constellation, cinematic cascade timeline, magnetic recovery transitions | Implemented (original code; see `docs/references/ATTRIBUTION.md`) |
 | 50 executable benchmark cases (46 run in backend; 4 external) | Implemented; run results in `docs/benchmark-results/latest.json` |
+| Household editing (add/remove/edit members, resources, tasks; undo; reset), plan export (JSON, calendar .ics, print/PDF) | Implemented and covered by e2e |
 | Deployment | **Live:** frontend https://maymourad.github.io/DOMINO/ (GitHub Pages) · API https://domino-api-0fo2.onrender.com (Render free tier — first request after idle can take ~30–60 s) |
 
 See [TESTING.md](TESTING.md) for the exact commands that were run and their results.
@@ -57,7 +60,7 @@ Copy `.env.example` to `.env` (repo root, git-ignored) and set `GEMINI_API_KEY` 
 ### Tests and checks
 
 ```bash
-cd backend  && python -m pytest && ruff check .       # 54 tests incl. the 50-case benchmark suite
+cd backend  && python -m pytest && ruff check .       # 63 tests incl. the 51-case benchmark suite
 cd frontend && npm run typecheck && npm run lint && npm test
 cd frontend && npx playwright install chromium && DOMINO_PYTHON=<python> npx playwright test
 cd frontend && VITE_BASE_PATH=/DOMINO/ npm run build     # production build for GitHub Pages
@@ -75,6 +78,9 @@ See [DEMO_GUIDE.md](DEMO_GUIDE.md): Amina becomes unavailable â†’ cascade �
 - The language model never schedules, validates, or approves anything; it only proposes structured events that a human must confirm.
 - Natural-language extraction can be wrong or incomplete â€” hence mandatory review. No accuracy figure exists until the annotated sentences are run against a real key.
 - The optimizer reflects the stated rules, not real-world wellbeing. No predictive emergency probabilities are produced.
+
+## Team
+May Ahmed Mourad (Grade 12), Shamsa Faris Almazrouei (Grade 12), Fatima Mohamed Almazrouei (Grade 11) — Abu Dhabi University 6th Annual COE STEM Programming with AI Competition 2026.
 
 ## Repository map
 

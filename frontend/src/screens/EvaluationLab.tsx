@@ -55,6 +55,8 @@ export default function EvaluationLab() {
   const [method, setMethod] = useState(false)
   const [replay, setReplay] = useState<{ id: string; r?: BenchResult; same?: boolean; busy: boolean } | null>(null)
   const [ai, setAi] = useState<{ status: 'idle' | 'running' | 'ready' | 'error'; data?: AiEval; error?: string }>({ status: 'idle' })
+  const [aiEngine, setAiEngine] = useState<'rules' | 'gemini'>('rules')
+  const [aiSet, setAiSet] = useState<'annotated' | 'heldout'>('heldout')
   const [filter, setFilter] = useState<'all' | 'pass' | 'fail' | 'not_run'>('all')
   const suite: BenchSuite | undefined = bench.data
 
@@ -78,7 +80,7 @@ export default function EvaluationLab() {
   const runAi = async () => {
     setAi({ status: 'running' })
     try {
-      const r = await fetch(`${(import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''}/v1/benchmarks/ai-interpretation`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+      const r = await fetch(`${(import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''}/v1/benchmarks/ai-interpretation`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: aiEngine, dataset: aiSet }) })
       if (!r.ok) throw new Error((await r.json()).error?.message ?? 'Request failed')
       setAi({ status: 'ready', data: await r.json() })
     } catch (e) { setAi({ status: 'error', error: (e as Error).message }) }
@@ -163,9 +165,13 @@ export default function EvaluationLab() {
 
         {tab === 'ai' && (<div style={{ display: 'grid', gap: 10 }}>
           <div className="card card-pad">
-            <h3>Annotated-sentence accuracy (real Gemini calls)</h3>
-            {!health?.ai.available && <Banner kind="warn"><b>Not executed — Gemini credentials unavailable.</b> No accuracy figure exists, and none is shown. Set <span className="mono">GEMINI_API_KEY</span> on the server to run the 12 annotated sentences.</Banner>}
-            <button className="btn primary" style={{ marginTop: 8 }} disabled={ai.status === 'running' || apiStatus === 'offline'} onClick={() => void runAi()}>{ai.status === 'running' ? <Loader2 size={15} className="spin" /> : <Play size={15} />} Run annotated sentences</button>
+            <h3>Natural-language interpretation accuracy</h3>
+            <p className="muted" style={{ margin: '2px 0 8px', fontSize: 12.5 }}>12 annotated sentences per set, scored on entities, event type, time window, uncertainty handling and exact match. The <b>built-in rule parser</b> always runs (deterministic, no AI key). <b>Gemini</b> runs only when the server has a key.</p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <label className="lbl">Engine <select className="input" style={{ width: 'auto' }} value={aiEngine} onChange={(e) => setAiEngine(e.target.value as 'rules' | 'gemini')}><option value="rules">Built-in rule parser</option><option value="gemini" disabled={!health?.ai.available}>Gemini{health?.ai.available ? '' : ' (no key on server)'}</option></select></label>
+              <label className="lbl">Sentence set <select className="input" style={{ width: 'auto' }} value={aiSet} onChange={(e) => setAiSet(e.target.value as 'annotated' | 'heldout')}><option value="heldout">Held-out (written after the parser)</option><option value="annotated">Annotated (used while developing)</option></select></label>
+            </div>
+            <button className="btn primary" style={{ marginTop: 8 }} disabled={ai.status === 'running' || apiStatus === 'offline'} onClick={() => void runAi()}>{ai.status === 'running' ? <Loader2 size={15} className="spin" /> : <Play size={15} />} Run {aiEngine === 'gemini' ? 'Gemini' : 'rule parser'} on {aiSet === 'heldout' ? 'held-out' : 'annotated'} set</button>
             {ai.status === 'error' && <Banner kind="bad">{ai.error}</Banner>}
             {ai.data && !ai.data.executed && <Banner kind="warn">{ai.data.reason}</Banner>}
             {ai.data?.executed && (<><div className="card" style={{ display: 'flex', flexWrap: 'wrap', marginTop: 10 }}>
@@ -174,7 +180,7 @@ export default function EvaluationLab() {
               <table className="tbl"><thead><tr><th>ID</th><th>Sentence</th><th>Expected</th><th>Observed</th><th /></tr></thead><tbody>
                 {ai.data.results.map((r) => <tr key={r.id}><td className="mono">{r.id}</td><td>{r.text}</td><td className="mono">{r.expected.status}</td><td className="mono">{r.status === 'ok' ? r.observedStatus : r.error}</td><td>{r.exact ? '✓' : '✗'}</td></tr>)}</tbody></table></>)}
           </div>
-          <p className="muted" style={{ margin: 0, fontSize: 12.5 }}>Below: deterministic safety logic around the model (entity resolution, injection handling, confirmation gating), tested with a stand-in extractor — these are <i>not</i> Gemini accuracy results.</p>
+          <p className="muted" style={{ margin: 0, fontSize: 12.5 }}>Below: deterministic safety logic shared by both engines (entity resolution, injection handling, confirmation gating, rule-parser smoke test) — executed in the benchmark suite.</p>
           {list(aiCases)}</div>)}
 
         {tab === 'scenarios' && (<div style={{ display: 'grid', gap: 10 }}>

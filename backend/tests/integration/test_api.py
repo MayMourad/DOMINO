@@ -87,8 +87,13 @@ def test_household_validation_endpoint():
 def test_interpret_without_key_is_honest(monkeypatch):
     from app.services import interpreter
     monkeypatch.setattr(interpreter.settings, "gemini_api_key", "")
-    r = client.post("/v1/events/interpret", json={"householdSnapshot": snap(), "text": "Amina is out until 6", "nowMin": 870})
+    body = {"householdSnapshot": snap(), "text": "Amina is out until 6", "nowMin": 870}
+    r = client.post("/v1/events/interpret", json={**body, "engine": "gemini"})
     assert r.status_code == 503 and r.json()["error"]["code"] == "AI_UNAVAILABLE"
+    r = client.post("/v1/events/interpret", json=body)            # auto: built-in parser keeps the feature working
+    j = r.json()
+    assert r.status_code == 200 and j["engine"] == "rules" and j["proposedEvents"][0]["confirmed"] is False
+    assert j["proposedEvents"][0]["affectedEntityIds"] == ["P01"] and j["engineNote"]
 
 
 def test_benchmark_catalog_does_not_pretend_to_have_run():

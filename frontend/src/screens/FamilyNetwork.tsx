@@ -5,6 +5,7 @@ import { GraphTextAlternative, ScheduleStrip } from '../components/timeline/Time
 import { MemberEditor, ResourceEditor, TaskEditor, blankTask } from '../components/forms/Editors'
 import { Banner, Modal, PageHeader, Stat } from '../components/ui/ui'
 import { buildEdges, entityLabel } from '../lib/graph'
+import { blankMember, blankResource, removeEntity } from '../lib/householdOps'
 import { fmtRange } from '../lib/time'
 import { useStore } from '../state/store'
 
@@ -49,7 +50,9 @@ export default function FamilyNetwork() {
         <div style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             <button className="btn sm" onClick={() => editHousehold((d) => { const t = blankTask(d); select(t.id); return { ...d, tasks: [...d.tasks, t] } })}><Plus size={14} /> Add task</button>
-            <button className="btn sm danger" disabled={!selTask} onClick={() => setConfirmDel(true)}><Trash2 size={14} /> Remove selected task</button>
+            <button className="btn sm" onClick={() => editHousehold((d) => { const m = blankMember(d); select(m.id); return { ...d, members: [...d.members, m] } })}><Plus size={14} /> Add member</button>
+            <button className="btn sm" onClick={() => editHousehold((d) => { const r = blankResource(d); select(r.id); return { ...d, resources: [...d.resources, r] } })}><Plus size={14} /> Add resource</button>
+            <button className="btn sm danger" disabled={!(selTask || selMember || selRes)} onClick={() => setConfirmDel(true)}><Trash2 size={14} /> Remove selected</button>
             <label style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 12.5 }}><input type="checkbox" checked={perm} onChange={(e) => setPerm(e.target.checked)} /> Show permission edges</label>
             <span className="muted" style={{ fontSize: 12, marginLeft: 'auto' }}>Drag nodes to rearrange · scroll to zoom · select to edit</span>
           </div>
@@ -73,19 +76,15 @@ export default function FamilyNetwork() {
         </aside>
       </div>
 
-      <Modal open={confirmDel} onClose={() => setConfirmDel(false)} title="Remove task?">
-        <p>Remove <b>{selTask?.title}</b>? Its baseline assignment and any dependencies on it are removed too. You can undo this.</p>
+      <Modal open={confirmDel} onClose={() => setConfirmDel(false)} title="Remove from household?">
+        <p>Remove <b>{selTask?.title ?? selMember?.name ?? selRes?.name}</b>? Everything that referred to it (assignments, prerequisites, permissions lists) is cleaned up so the household stays valid. You can undo this.</p>
         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
           <button className="btn" onClick={() => setConfirmDel(false)}>Cancel</button>
           <button className="btn danger" onClick={() => {
-            const id = selTask!.id
-            editHousehold((d) => ({
-              ...d, tasks: d.tasks.filter((t) => t.id !== id).map((t) => ({ ...t, predecessorTaskIds: t.predecessorTaskIds.filter((p) => p !== id) })),
-              baselineAssignments: d.baselineAssignments.filter((a) => a.taskId !== id),
-              milestones: d.milestones.map((m) => ({ ...m, enabledByTaskIds: m.enabledByTaskIds.filter((t) => t !== id) })),
-            }))
+            const id = (selTask ?? selMember ?? selRes)!.id
+            editHousehold((d) => removeEntity(d, id))
             select(null); setConfirmDel(false)
-          }}>Remove task</button>
+          }}>Remove</button>
         </div>
       </Modal>
     </div>
