@@ -4,7 +4,7 @@
 
 > When one part of family life changes, DOMINO calculates what happens next — and helps the family find a verified way forward.
 
-DOMINO is a **computational family digital twin and recovery planner**, built for the Abu Dhabi University 6th Annual COE STEM Programming with AI Competition (theme: *AI for Family*, Cycle 3). It is **not** a calendar, a to-do list, or a chatbot: it models a household as a typed dependency graph, finds what a hypothetical disruption invalidates (directly and downstream), solves for legal recovery assignments with **Google OR-Tools CP-SAT**, and re-checks every plan with a **separate, independent verifier** before a human approves it.
+DOMINO is a **computational family digital twin and recovery planner**, built for the Abu Dhabi University 6th Annual COE STEM Programming with AI Competition (theme: *AI for Family*, Cycle 3). The team's submitted entry for that competition was [WASL Arena](https://github.com/MayMourad/wasl-arena); DOMINO was developed for it but was not the submission. It is **not** a calendar, a to-do list, or a chatbot: it models a household as a typed dependency graph, finds what a hypothetical disruption invalidates (directly and downstream), solves for legal recovery assignments with **Google OR-Tools CP-SAT**, and re-checks every plan with a **separate, independent verifier** before a human approves it.
 
 All households are **fictional**. DOMINO simulates hypothetical events from the data you give it; it does not predict real emergencies, track anyone, or contact anyone. It is not endorsed by any government body; it relates to the UAE Year of Family 2026 only in theme.
 
